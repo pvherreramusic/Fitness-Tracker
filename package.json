@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/calebjhenderson/Fitness-Tracker/issues"
   },
-  "homepage": "https://github.com/calebjhenderson/Fitness-Tracker#readme"
+  "homepage": "https://github.com/calebjhenderson/Fitness-Tracker#readme",
+  "dependencies": {
+    "nodemon": "^2.0.4"
+  }
 }
