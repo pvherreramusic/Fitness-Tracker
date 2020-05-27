@@ -1,0 +1,19 @@
+{
+  "name": "fitness_project2",
+  "version": "1.0.0",
+  "description": "A API ",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/calebjhenderson/Fitness-Tracker.git"
+  },
+  "author": "Patrick-Vincent Herrera, Caleb Henderson",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/calebjhenderson/Fitness-Tracker/issues"
+  },
+  "homepage": "https://github.com/calebjhenderson/Fitness-Tracker#readme"
+}
