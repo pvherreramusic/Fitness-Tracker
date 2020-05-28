@@ -48,7 +48,7 @@ async function createUser({
   }) {
     try {
       const { rows: [ activity ] } = await client.query(`
-        INSERT INTO activity(name, description ) 
+        INSERT INTO activities(name, description ) 
         VALUES($1, $2)
         RETURNING *;
       `, [name, description]);
@@ -66,27 +66,43 @@ async function createUser({
     (key, index) => `"${ key }"=$${ index + 1 }`
   ).join(', ');
 
-  try {
+    try {
     // update any fields that need to be updated
     if (setString.length > 0) {
       await client.query(`
-        UPDATE activity
+        UPDATE activities
         SET ${ setString }
         WHERE id=${ id }
         RETURNING *;
       `, Object.values(name, description));
    }
- } catch (error) {
+    } catch (error) {
         throw error;
+  }
+  
+  async function getAllActivities() {
+        try {
+          const { rows: activities } = await client.query(`
+            SELECT *
+            FROM activities;
+          `);
+      
+          
+      
+          return activities;
+        } catch (error) {
+          throw error;
+        }
       }
-    
+      
 
       module.exports = {  
         client,
         createUser,
         createActivity,
         getUser,
-        updateActivity
+        updateActivity,
+        getAllActivities,
    
         
         
