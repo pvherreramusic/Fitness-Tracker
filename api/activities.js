@@ -5,4 +5,3 @@ module.exports = activitiesRouter;
 
 
 
-"Patrick-Vincent Herrera again"
