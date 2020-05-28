@@ -1,3 +1,15 @@
+const { Client } = require('pg') // imports the pg module
+
+const client = new Client(process.env.DATABASE_URL || 'postgres://localhost:5432/fitness');
+
+module.exports = {
+  client,
+  ...require('./users'), // adds key/values from users.js
+  ...require('./activities'), // adds key/values from activites.js
+  ...require('./routines'), // etc
+  ...require('./routine_activities') // etc
+}
+
 async function createUser({ 
     username, 
     password
@@ -16,32 +28,66 @@ async function createUser({
     }
   }
 
-  async function getUsers() {
+  async function getUser({ username, password }) {
     try {
-      const { rows } = await client.query(`
-        SELECT username, password
-        FROM users;
-      `);
+        const { rows: [user] } = await client.query(`
+          SELECT *
+          FROM users
+          WHERE username=$1, password=$2
+        `, [username, password]);
+    
+        return user;
+      } catch (error) {
+        throw error;
+      }
+    }
+
+  async function createActivity({
+    name,
+    description= []
+  }) {
+    try {
+      const { rows: [ activity ] } = await client.query(`
+        INSERT INTO activity(name, description ) 
+        VALUES($1, $2)
+        RETURNING *;
+      `, [name, description]);
   
-      return rows;
+      return activity;
     } catch (error) {
       throw error;
     }
   }
 
-  async function createPost({
-    name,
-    description= []
-  }) {
-    try {
-      const { rows: [ post ] } = await client.query(`
-        INSERT INTO posts(name, description ) 
-        VALUES($1, $2)
+
+  async function updateActivity({ id, name, description })
+
+  const setString = Object.keys(name, description).map(
+    (key, index) => `"${ key }"=$${ index + 1 }`
+  ).join(', ');
+
+  try {
+    // update any fields that need to be updated
+    if (setString.length > 0) {
+      await client.query(`
+        UPDATE activity
+        SET ${ setString }
+        WHERE id=${ id }
         RETURNING *;
-      `, [name, description]);
-  
-      return post;
-    } catch (error) {
-      throw error;
-    }
-  }
+      `, Object.values(name, description));
+   }
+ } catch (error) {
+        throw error;
+      }
+    
+
+      module.exports = {  
+        client,
+        createUser,
+        createActivity,
+        getUser,
+        updateActivity
+   
+        
+        
+      }
