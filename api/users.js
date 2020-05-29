@@ -23,7 +23,7 @@ bcrypt.compare(password, hashedPassword, function(err, passwordsMatch) {
   if (passwordsMatch) {
     
   } else {
-    throw SomeError;
+    throw err("Not working, dum dum", err);
   }
 });
 
