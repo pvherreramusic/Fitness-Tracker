@@ -7,12 +7,19 @@ routinesRouter.use((req,res,next)=>{
 });
 
 //in here will be something like getAllRoutines
-routinesRouter.get('/',(req,res,err)=>{});
+routinesRouter.get('/',(req,res,err)=>{
+   try{ 
+    const routines = await getAllRoutines();
+    res.send(routines)
+   }catch(error){
+       throw error
+   }
+});
 
 //And here would be calling createNewRoutine
 routinesRouter.post('/',(req,res,err)=>{});
 
 //something like editRoutine
-routinesRouter.patch('/',(req,res,err)=>{});
+routinesRouter.patch('/:routineId',(req,res,err)=>{});
 
 module.exports = routinesRouter;

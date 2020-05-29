@@ -1,3 +1,5 @@
+//FUNCTIONS TO POPULATE OUR DATABASE
+
 const { Client } = require('pg');
 const connectionString = 'postgres://localhost:5432/fitness-dev';
 const client = new Client(connectionString)
@@ -34,9 +36,24 @@ async function createUser({
       } catch (error) {
         throw error;
       }
+    };
+
+async function getAllUsers({ username }){
+    try{
+      const { rows: [user] } = await client.query(`
+      SELECT*
+      FROM users
+      `,[ user ]);
+
+      return user;
+
+    }catch(error){
+      throw(error)
     }
 
-  async function createActivity({
+  };
+
+async function createActivity({
     name,
     description= []
   }) {
@@ -55,7 +72,7 @@ async function createUser({
   }
 
 
-  async function updateActivity({ id, name, description })
+async function updateActivity({ id, name, description })
 
   const setString = Object.keys(name, description).map(
     (key, index) => `"${ key }"=$${ index + 1 }`
@@ -75,7 +92,7 @@ async function createUser({
         throw error;
   }
   
-  async function getAllActivities() {
+async function getAllActivities() {
         try {
           const { rows: activities } = await client.query(`
             SELECT *
@@ -88,18 +105,30 @@ async function createUser({
         } catch (error) {
           throw error;
         }
-      }
+      };
 
+async function getAllRoutines(){
+  try{
+    const { rows: routines } = await client.query(`
+    SELECT *
+    FROM routines;
+    `);
+  } catch(error){
+    throw error;
+  }
+};
       
       
 
       module.exports = {  
         client,
         createUser,
-        createActivity,
         getUser,
+        getAllUsers,
+        createActivity,
         updateActivity,
         getAllActivities,
+        getAllRoutines
       }
       
       // module.exports = {
