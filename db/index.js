@@ -1,14 +1,8 @@
-const { Client } = require('pg'); // imports the pg module
+const { Client } = require('pg');
 const connectionString = 'postgres://localhost:5432/fitness-dev';
 const client = new Client(connectionString)
 
-module.exports = {
-  client,
-  ...require('./users'), // adds key/values from users.js
-  ...require('./activities'), // adds key/values from activites.js
-  ...require('./routines'), // etc
-  ...require('./routine_activities') // etc
-}
+
 
 async function createUser({ 
     username, 
@@ -106,7 +100,11 @@ async function createUser({
         getUser,
         updateActivity,
         getAllActivities,
-   
-        
-    
       }
+      
+      // module.exports = {
+//   ...require('./users'), // adds key/values from users.js
+//   ...require('./activities'), // adds key/values from activites.js
+//   ...require('./routines'), // etc
+//   ...require('./routine_activities') // etc
+// }
