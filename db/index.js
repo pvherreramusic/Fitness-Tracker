@@ -1,6 +1,6 @@
-const { Client } = require('pg') // imports the pg module
-
-const client = new Client(process.env.DATABASE_URL || 'postgres://localhost:5432/fitness');
+const { Client } = require('pg'); // imports the pg module
+const connectionString = 'postgres://localhost:5432/fitness-dev';
+const client = new Client(connectionString)
 
 module.exports = {
   client,
@@ -105,5 +105,5 @@ async function createUser({
         getAllActivities,
    
         
-        
+    
       }
