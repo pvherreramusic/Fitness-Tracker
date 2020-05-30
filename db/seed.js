@@ -1,9 +1,10 @@
-const { client  } = require('./index')
-const { getUser, createUser} = require('./users')
-const { createActivity, getAllActivities } = require('./activities')
+const { client  } = require('./client')
+const { getUsers, createUser, createInitialUsers} = require('./users')
+const { createActivity, getAllActivities, createInitialActivities } = require('./activities')
 const { createRoutine, getAllRoutines, getAllRoutinesByUser, updateRoutine} = require('./routines')
 const { addActivityToRoutine, updateRoutineActivity, destroyRoutineActivity } = require ('./routine_activities')
-const chalk = require('chalk');
+
+const chalk = require('chalk')
 
 
 async function dropTables(){
@@ -59,25 +60,24 @@ async function createTables(){
     }
 };
 
+
 async function buildDB(){
     try{
         client.connect();
         await dropTables();
         await createTables();
+        
     } catch(error){
         console.log(chalk.red('Uh-Oh!'))
         throw error;
     }
 };
 
+//ERRORS:getUsers is not a function?  
+//       client is not ending at the end of test
 async function testDB(){
     try{
         console.log('Testing the database now!');
-
-        console.log('Calling getUser!');
-        const allUsers = await getUser();
-        console.log('Here are all the users...', allUsers);
-
         console.log('Calling getAllActivities!');
         const allActivities = await getAllActivities();
         console.log('Here are all the activities...', allActivities);
@@ -86,20 +86,27 @@ async function testDB(){
         const allRoutines = await getAllRoutines();
         console.log('Here are all the routines...', allRoutines);
 
+        console.log('Calling getUsers!');
+        const allUsers = await getUsers();
+        console.log('Here are all the users...', allUsers);
 
-        //NEED TO ADD THE REST OF THE FUNCTIONS AFTER THEY'RE WRITTEN IN /INDEX.js!
+        console.log('Calling createInitialUsers!');
+        const initialUsers = await createInitialUsers();
+        console.log('Here are your users!', initialUsers)
+
+        console.log('Calling createInitialActivities!');
+        const initialActivities  = await createInitialActivities();
+        console.log('Here are your activities!', initialActivities)
 
         console.log('Done testing the database :)');
-
-    }catch(error){
+    } catch(error){
         console.log('Error testing your database!')
         throw error
     }
-
-}
+};
 
 buildDB()
 .then(testDB)
 .catch(console.error)
-
 .finally(()=>client.end());
+//NEITHER CLIENT IS ENDING ?

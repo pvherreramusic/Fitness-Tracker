@@ -1,9 +1,9 @@
-const { client } = require('./index');
+const { client } = require('./client');
 
 
 async function createActivity({
     name,
-    description= []
+    description= ''
   }) {
     try {
       const { rows: [ activity ] } = await client.query(`
@@ -52,6 +52,16 @@ async function getAllActivities() {
 //         throw error;
 //   }
 
+async function createInitialActivities(){
+    try{
+        console.log(chalk.yellow('Making you some activities!'))
+        await createActivity({ name:'basketball', description:'Game of horse ,anyone?'})
+
+    }catch(error){
+        throw error
+    }
+};
+
 module.exports = {
-    createActivity, getAllActivities
+    createActivity, getAllActivities, createInitialActivities
 };

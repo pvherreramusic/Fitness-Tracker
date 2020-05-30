@@ -1,4 +1,4 @@
-const { client } = require('./index');
+const { client } = require('./client');
 
 async function getAllRoutines() {
     try {
@@ -49,7 +49,7 @@ async function updateRoutine({ id, public, name, goal }) {
    
 
 
-  async function getAllRoutinesByUser({ username }) {
+async function getAllRoutinesByUser({ username }) {
     try {
       const { rows: routines } = await client.query(`
         SELECT id 
@@ -64,9 +64,9 @@ async function updateRoutine({ id, public, name, goal }) {
     } catch (error) {
       throw error;
     }
-  }
+};
 
-  async function getPublicRoutines(){
+async function getPublicRoutines(){
     try {
       const { rows } = await client.query(`
         SELECT *
@@ -78,9 +78,9 @@ async function updateRoutine({ id, public, name, goal }) {
     } catch (error) {
       throw error;
     }
-  }
+};
 
-  async function getPublicRoutinesByUser({username}) {
+async function getPublicRoutinesByUser({username}) {
     try {
       const { rows } = await client.query(`
       SELECT *
@@ -93,11 +93,10 @@ async function updateRoutine({ id, public, name, goal }) {
     } catch (error) {
       throw error;
     }
-  }
+};
   
-  async function getPublicRoutinesByActivity({ activityId }){
+async function getPublicRoutinesByActivity({ activityId }){
    ///May not work because it has not been tested.
-   
     try {
       const { rows: publicRoutines } = await client.query(`
         SELECT *
@@ -108,17 +107,24 @@ async function updateRoutine({ id, public, name, goal }) {
         AND routine_activities."activityId"=$1
       `, [activityId]);
       console.log(publicRoutines)
-  
-    
-      
     } catch (error) {
       throw error;
     }
-  } 
+}; 
+
+
+async function createInitialRoutines(){
+    try{
+
+    }catch(error){
+        console.log('Error creating routines!')
+        throw error
+    }
+};
   
 
 
 module.exports = {
     createRoutine, updateRoutine, getAllRoutines, getPublicRoutines, getPublicRoutinesByActivity, getPublicRoutinesByUser, getAllRoutinesByUser
-}
+};
 
