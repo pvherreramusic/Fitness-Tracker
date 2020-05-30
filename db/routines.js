@@ -1,4 +1,17 @@
+const { client } = require('./index');
 
+async function getAllRoutines() {
+    try {
+      const { rows:routines } = await client.query(`
+        SELECT * 
+        FROM routines;
+      `);
+  
+      return []
+    } catch (error) {
+      throw error;
+    }
+  }
 
 async function createRoutine({ creatorId, public, name, goal }){
     try {
@@ -14,6 +27,7 @@ async function createRoutine({ creatorId, public, name, goal }){
      throw error;
    }
 };
+
 async function updateRoutine({ id, public, name, goal }) {
      const setString = Object.keys(name, goal, public).map(
        (key, index) => `"${ key }"=$${ index + 1 }`
@@ -33,30 +47,31 @@ async function updateRoutine({ id, public, name, goal }) {
      }   
 };
    
-async function getAllRoutinesByUser({ username }) {
-     try {
-       const { rows: routines } = await client.query(`
-         SELECT id 
-         FROM routines 
-         WHERE "authorId"=${ username };
-       `);
-   
-       const userroutine = await Promise.all(routines.map(
-         routine => getUser( routine.username )
-       ));
-       return userroutine;
-     } catch (error) {
-       throw error;
-     }
-   }
 
-   async function getPublicRoutinesByUser({username}) {
+
+  async function getAllRoutinesByUser({ username }) {
+    try {
+      const { rows: routines } = await client.query(`
+        SELECT id 
+        FROM routines 
+        WHERE "authorId"=${ username };
+      `);
+  
+      const userroutine = await Promise.all(routines.map(
+        routine => getUser( routine.username )
+      ));
+      return userroutine;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async function getPublicRoutines(){
     try {
       const { rows } = await client.query(`
-      SELECT *
-      FROM routines
-      WHERE username=${username} 
-      AND public=true
+        SELECT *
+        FROM routines
+        WHERE public=true;
       `);
   
       return { rows }
@@ -65,12 +80,13 @@ async function getAllRoutinesByUser({ username }) {
     }
   }
 
-
-   async function getAllRoutines() {
+  async function getPublicRoutinesByUser({username}) {
     try {
       const { rows } = await client.query(`
-        SELECT * 
-        FROM routines;
+      SELECT *
+      FROM routines
+      WHERE username=${username} 
+      AND public=true
       `);
   
       return { rows }
@@ -100,18 +116,9 @@ async function getAllRoutinesByUser({ username }) {
     }
   } 
   
-async function getPublicRoutines(){
-  try {
-    const { rows } = await client.query(`
-      SELECT *
-      FROM routines
-      WHERE public=true;
-    `);
 
-    return { rows }
-  } catch (error) {
-    throw error;
-  }
+
+module.exports = {
+    createRoutine, updateRoutine, getAllRoutines, getPublicRoutines, getPublicRoutinesByActivity, getPublicRoutinesByUser, getAllRoutinesByUser
 }
-
 

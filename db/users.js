@@ -1,3 +1,5 @@
+const { client } = require('./client')
+
 async function createUser({ 
     username, 
     password
@@ -16,7 +18,7 @@ async function createUser({
     }
   }
 
-  async function getUser({ username, password }) {
+async function getUser({ username, password }) {
     try {
         const { rows: [user] } = await client.query(`
           SELECT *

@@ -1,7 +1,8 @@
-const { client, getAllRoutines  } = require('./index')
+const { client  } = require('./index')
 const { getUser, createUser} = require('./users')
 const { createActivity, getAllActivities } = require('./activities')
-const { createRoutine, getAllRoutinesByUser, updateRoutine} = require('./routines')
+const { createRoutine, getAllRoutines, getAllRoutinesByUser, updateRoutine} = require('./routines')
+const { addActivityToRoutine, updateRoutineActivity, destroyRoutineActivity } = require ('./routine_activities')
 const chalk = require('chalk');
 
 
@@ -73,9 +74,9 @@ async function testDB(){
     try{
         console.log('Testing the database now!');
 
-        // console.log('Calling getUser!');
-        // const allUsers = await getUser();
-        // console.log('Here are all the users...', allUsers);
+        console.log('Calling getUser!');
+        const allUsers = await getUser();
+        console.log('Here are all the users...', allUsers);
 
         console.log('Calling getAllActivities!');
         const allActivities = await getAllActivities();
@@ -84,6 +85,7 @@ async function testDB(){
         console.log('Calling getAllRoutines!');
         const allRoutines = await getAllRoutines();
         console.log('Here are all the routines...', allRoutines);
+
 
         //NEED TO ADD THE REST OF THE FUNCTIONS AFTER THEY'RE WRITTEN IN /INDEX.js!
 
@@ -99,4 +101,5 @@ async function testDB(){
 buildDB()
 .then(testDB)
 .catch(console.error)
+
 .finally(()=>client.end());
