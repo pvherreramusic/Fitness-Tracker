@@ -1,3 +1,5 @@
+
+
 async function createRoutine({ creatorId, public, name, goal }){
     try {
      const { rows: [ routines ] } = await client.query(`
@@ -46,10 +48,70 @@ async function getAllRoutinesByUser({ username }) {
      } catch (error) {
        throw error;
      }
-};
-
-   module.exports = {
-       createRoutine,
-       updateRoutine,
-       getAllRoutinesByUser
    }
+
+   async function getPublicRoutinesByUser({username}) {
+    try {
+      const { rows } = await client.query(`
+      SELECT *
+      FROM routines
+      WHERE username=${username} 
+      AND public=true
+      `);
+  
+      return { rows }
+    } catch (error) {
+      throw error;
+    }
+  }
+
+
+   async function getAllRoutines() {
+    try {
+      const { rows } = await client.query(`
+        SELECT * 
+        FROM routines;
+      `);
+  
+      return { rows }
+    } catch (error) {
+      throw error;
+    }
+  }
+  
+  async function getPublicRoutinesByActivity({ activityId }){
+   ///May not work because it has not been tested.
+   
+    try {
+      const { rows: publicRoutines } = await client.query(`
+        SELECT *
+        FROM routines
+        JOIN routine_activities ON routines.id=routine_activities."routineId"
+        JOIN activities ON activities.id=routine_activities."activityId"
+        WHERE routines.public=true 
+        AND routine_activities."activityId"=$1
+      `, [activityId]);
+      console.log(publicRoutines)
+  
+    
+      
+    } catch (error) {
+      throw error;
+    }
+  } 
+  
+async function getPublicRoutines(){
+  try {
+    const { rows } = await client.query(`
+      SELECT *
+      FROM routines
+      WHERE public=true;
+    `);
+
+    return { rows }
+  } catch (error) {
+    throw error;
+  }
+}
+
+
