@@ -39,6 +39,14 @@ async function createTables(){
             name VARCHAR(255) UNIQUE NOT NULL,
             goal TEXT NOT NULL
         );
+
+        CREATE TABLE routine_activities(
+            id SERIAL PRIMARY KEY,
+            "routineId" INTEGER REFERENCES routines,
+            "activityId" INTEGER REFERENCES activities,
+            duration INTEGER,
+            count INTEGER
+        );
         `)
     }catch(error){
         console.log('Error creating tables :(')
@@ -52,7 +60,7 @@ async function buildDB(){
         await dropTables();
         await createTables();
     } catch(error){
-        console.log('Error building or droppring your tables!');
+        console.log('Error building or dropping your tables!');
         throw error;
     }
 };

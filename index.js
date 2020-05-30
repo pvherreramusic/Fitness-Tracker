@@ -6,14 +6,11 @@ const app = express();
 const chalk = require('chalk');
 
 
-
 //>>>>>>>>>>>>>>>>>>>UNABLE TO CONNECT TO THE CLIENT HERE.............
 //>>>>>>>>>>>>>>>>>>> CLIENT VARIABLE IS REQUIRED FROM POSTGRES IN DB FOLDER 
 
-// const { client } = require('./db');
-// client.connect();
-
-
+const { client } = require('./db');
+client.connect();
 
 
 app.listen( PORT, () => {
@@ -21,5 +18,5 @@ app.listen( PORT, () => {
 
 });
 
-// const apiRouter = require('./api');
-// app.use('/api', apiRouter);
+const apiRouter = require('./api');
+app.use('/api', apiRouter);
