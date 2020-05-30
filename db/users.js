@@ -1,6 +1,4 @@
-
-
-
+const { client } = require('./client')
 
 async function createUser({ 
     username, 
@@ -20,7 +18,7 @@ async function createUser({
     }
   }
 
-  async function getUser({ username, password }) {
+async function getUser({ username, password }) {
     try {
         const { rows: [user] } = await client.query(`
           SELECT *
@@ -33,3 +31,7 @@ async function createUser({
         throw error;
       }
     };
+
+module.export = {
+    createUser, getUser
+}

@@ -1,3 +1,6 @@
+const { client } = require('./index');
+
+
 async function createActivity({
     name,
     description= []
@@ -23,16 +26,13 @@ async function getAllActivities() {
             SELECT *
             FROM activities;
           `);
-      
-          
-      
           return activities;
         } catch (error) {
           throw error;
         }
   }
 
-  // async function updateActivity({ id, name, description })
+//   async function updateActivity({ id, name, description })
 
 //   const setString = Object.keys(name, description).map(
 //     (key, index) => `"${ key }"=$${ index + 1 }`
@@ -53,5 +53,5 @@ async function getAllActivities() {
 //   }
 
 module.exports = {
-    createActivity, getAllActivities, updateActivity
+    createActivity, getAllActivities
 };

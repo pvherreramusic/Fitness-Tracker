@@ -1,17 +1,22 @@
-// THIS SHOULD RUN THE FUNCTIONS IN INDEX, ACTUALLY POPULATING THE DB IN A TEST FUNCTION TO MAKE SURE EVERYTHING WORKS!
-
-
-const { client, getAllUsers, getAllActivities, getAllRoutines  } = require('./index')
+const { client  } = require('./index')
+const { getUser, createUser} = require('./users')
+const { createActivity, getAllActivities } = require('./activities')
+const { createRoutine, getAllRoutines, getAllRoutinesByUser, updateRoutine} = require('./routines')
+const { addActivityToRoutine, updateRoutineActivity, destroyRoutineActivity } = require ('./routine_activities')
+const chalk = require('chalk');
 
 
 async function dropTables(){
     try{
         console.log('Starting to drop the tables!');
         await client.query(`
-        DROP TABLE IF EXISTS users, activities, routines;
+        DROP TABLE IF EXISTS routine_activities; 
+        DROP TABLE IF EXISTS routines; 
+        DROP TABLE IF EXISTS activities;
+        DROP TABLE IF EXISTS users;
         `);
     }catch(error){
-        console.log('Error dropping the tables.')
+        console.log(chalk.red('Error dropping the tables.'))
         throw error
     }
 };
@@ -49,7 +54,7 @@ async function createTables(){
         );
         `)
     }catch(error){
-        console.log('Error creating tables :(')
+        console.log(chalk.red('Error creating tables :('))
         throw(error);
     }
 };
@@ -60,7 +65,7 @@ async function buildDB(){
         await dropTables();
         await createTables();
     } catch(error){
-        console.log('Error building or dropping your tables!');
+        console.log(chalk.red('Uh-Oh!'))
         throw error;
     }
 };
@@ -69,8 +74,8 @@ async function testDB(){
     try{
         console.log('Testing the database now!');
 
-        console.log('Calling getAllUsers!');
-        const allUsers = await getAllUsers();
+        console.log('Calling getUser!');
+        const allUsers = await getUser();
         console.log('Here are all the users...', allUsers);
 
         console.log('Calling getAllActivities!');
@@ -80,6 +85,7 @@ async function testDB(){
         console.log('Calling getAllRoutines!');
         const allRoutines = await getAllRoutines();
         console.log('Here are all the routines...', allRoutines);
+
 
         //NEED TO ADD THE REST OF THE FUNCTIONS AFTER THEY'RE WRITTEN IN /INDEX.js!
 
@@ -95,4 +101,5 @@ async function testDB(){
 buildDB()
 .then(testDB)
 .catch(console.error)
+
 .finally(()=>client.end());
