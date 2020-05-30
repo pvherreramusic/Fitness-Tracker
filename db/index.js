@@ -38,20 +38,7 @@ async function createUser({
       }
     };
 
-async function getAllUsers({ username }){
-    try{
-      const { rows: [user] } = await client.query(`
-      SELECT*
-      FROM users
-      `,[ user ]);
 
-      return user;
-
-    }catch(error){
-      throw(error)
-    }
-
-  };
 
 async function createActivity({
     name,
@@ -105,19 +92,63 @@ async function getAllActivities() {
         } catch (error) {
           throw error;
         }
-      };
+  }
 
-async function getAllRoutines(){
-  try{
+ async function createRoutine({ creatorId, public, name, goal }){
+ try {
+  const { rows: [ routines ] } = await client.query(`
+    INSERT INTO routines(creatorId, public, name, goal) 
+    VALUES($1, $2, $3, $4)
+    ON CONFLICT (name) DO NOTHING 
+    RETURNING *;
+  `, [creatorId, public, name, goal]);
+
+  return routines;
+} catch (error) {
+  throw error;
+}
+}
+async function updateRoutine({ id, public, name, goal }) {
+  const setString = Object.keys(name, goal, public).map(
+    (key, index) => `"${ key }"=$${ index + 1 }`
+  ).join(', ');
+
+    try {
+    if (setString.length > 0) {
+      await client.query(`
+        UPDATE activities
+        SET ${ setString }
+        WHERE id=${ id }
+        RETURNING *;
+      `, Object.values(name, goal, public));
+   }
+    } catch (error) {
+        throw error;
+  }
+
+
+}
+
+async function getAllRoutinesByUser({ username }) {
+  try {
     const { rows: routines } = await client.query(`
-    SELECT *
-    FROM routines;
+      SELECT id 
+      FROM routines 
+      WHERE "authorId"=${ username };
     `);
-  } catch(error){
+
+    const userroutine = await Promise.all(routines.map(
+      routine => getUser( routine.username )
+    ));
+
+    return userroutine;
+  } catch (error) {
     throw error;
   }
-};
-      
+}
+
+
+
       
 
       module.exports = {  
@@ -128,7 +159,9 @@ async function getAllRoutines(){
         createActivity,
         // updateActivity,
         getAllActivities,
-        getAllRoutines
+        getAllRoutines,
+        createRoutine,
+        updateRoutine,
       }
       
       // module.exports = {
