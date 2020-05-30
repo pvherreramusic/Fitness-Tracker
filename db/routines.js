@@ -1,7 +1,3 @@
-
-
-
-
 async function createRoutine({ creatorId, public, name, goal }){
     try {
      const { rows: [ routines ] } = await client.query(`
@@ -15,8 +11,8 @@ async function createRoutine({ creatorId, public, name, goal }){
    } catch (error) {
      throw error;
    }
-   }
-   async function updateRoutine({ id, public, name, goal }) {
+};
+async function updateRoutine({ id, public, name, goal }) {
      const setString = Object.keys(name, goal, public).map(
        (key, index) => `"${ key }"=$${ index + 1 }`
      ).join(', ');
@@ -32,12 +28,10 @@ async function createRoutine({ creatorId, public, name, goal }){
       }
        } catch (error) {
            throw error;
-     }
+     }   
+};
    
-   
-   }
-   
-   async function getAllRoutinesByUser({ username }) {
+async function getAllRoutinesByUser({ username }) {
      try {
        const { rows: routines } = await client.query(`
          SELECT id 
@@ -48,9 +42,14 @@ async function createRoutine({ creatorId, public, name, goal }){
        const userroutine = await Promise.all(routines.map(
          routine => getUser( routine.username )
        ));
-   
        return userroutine;
      } catch (error) {
        throw error;
      }
+};
+
+   module.exports = {
+       createRoutine,
+       updateRoutine,
+       getAllRoutinesByUser
    }
