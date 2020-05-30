@@ -59,25 +59,24 @@ async function createActivity({
   }
 
 
-// async function updateActivity({ id, name, description })
+async function updateActivity({ id, name, description })
 
-//   const setString = Object.keys(name, description).map(
-//     (key, index) => `"${ key }"=$${ index + 1 }`
-//   ).join(', ');
+  const setString = Object.keys(name, description).map(
+    (key, index) => `"${ key }"=$${ index + 1 }`
+  ).join(', ');
 
-//     try {
-//     // update any fields that need to be updated
-//     if (setString.length > 0) {
-//       await client.query(`
-//         UPDATE activities
-//         SET ${ setString }
-//         WHERE id=${ id }
-//         RETURNING *;
-//       `, Object.values(name, description));
-//    }
-//     } catch (error) {
-//         throw error;
-//   }
+    try {
+    if (setString.length > 0) {
+      await client.query(`
+        UPDATE activities
+        SET ${ setString }
+        WHERE id=${ id }
+        RETURNING *;
+      `, Object.values(name, description));
+   }
+    } catch (error) {
+        throw error;
+  }
   
 async function getAllActivities() {
         try {
@@ -129,27 +128,6 @@ async function updateRoutine({ id, public, name, goal }) {
 
 }
 
-async function getAllRoutinesByUser({ username }) {
-  try {
-    const { rows: routines } = await client.query(`
-      SELECT id 
-      FROM routines 
-      WHERE "authorId"=${ username };
-    `);
-
-    const userroutine = await Promise.all(routines.map(
-      routine => getUser( routine.username )
-    ));
-
-    return userroutine;
-  } catch (error) {
-    throw error;
-  }
-}
-
-
-
-      
 
       module.exports = {  
         client,
@@ -157,11 +135,12 @@ async function getAllRoutinesByUser({ username }) {
         getUser,
         getAllUsers,
         createActivity,
-        // updateActivity,
+        updateActivity,
         getAllActivities,
         getAllRoutines,
         createRoutine,
         updateRoutine,
+        getAllRoutinesByUser
       }
       
       // module.exports = {
