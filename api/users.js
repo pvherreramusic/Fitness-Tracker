@@ -21,7 +21,7 @@ usersRouter.post('/register', async (req, res, next) => {
     const SALT_COUNT = 10;
 try{
 bcrypt.hash(password, SALT_COUNT, function(err, hashedPassword) {
-  const newUser =createUser({
+  const newUser = await createUser({
     username,
     password: hashedPassword // not the plaintext
   });
@@ -35,7 +35,7 @@ bcrypt.hash(password, SALT_COUNT, function(err, hashedPassword) {
 
 usersRouter.post('/login', async (req, res, next) => {
 const { username, password } = req.body;
-const user = await getUsers(username);
+const user = await getUser(username, password);
 const hashedPassword = user.password;
 
 bcrypt.compare(password, hashedPassword, function(err, passwordsMatch) {
