@@ -1,4 +1,5 @@
 const { client } = require('./client');
+const chalk = require('chalk')
 
 
 async function createActivity({
@@ -54,7 +55,7 @@ async function getAllActivities() {
 
 async function createInitialActivities(){
     try{
-        console.log(chalk.yellow('Making you some activities!'))
+        console.log(chalk.yellow('Giving them some activities!'))
         await createActivity({ name:'basketball', description:'Game of horse ,anyone?'})
 
     }catch(error){

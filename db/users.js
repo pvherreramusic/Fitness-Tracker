@@ -1,4 +1,5 @@
 const { client } = require('./client')
+const  chalk  = require('chalk')
 
 async function createUser({ 
     username, 
@@ -43,6 +44,6 @@ async function getUsers({ username, password }) {
     };
     
 
-module.export = {
+module.exports = {
     createUser, getUsers, createInitialUsers
 }

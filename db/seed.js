@@ -73,30 +73,21 @@ async function buildDB(){
     }
 };
 
-//ERRORS:getUsers is not a function?  
+//ERRORS:Users and activities returned are undefined , failing the other test
 //       client is not ending at the end of test
 async function testDB(){
     try{
         console.log('Testing the database now!');
-        console.log('Calling getAllActivities!');
-        const allActivities = await getAllActivities();
-        console.log('Here are all the activities...', allActivities);
 
-        console.log('Calling getAllRoutines!');
-        const allRoutines = await getAllRoutines();
-        console.log('Here are all the routines...', allRoutines);
+        const initialUsers = await createInitialUsers();
+        console.log('Here are your users!', initialUsers)
+
+        const initialActivities  = await createInitialActivities();
+        console.log('Here are your activities!', initialActivities)
 
         console.log('Calling getUsers!');
         const allUsers = await getUsers();
         console.log('Here are all the users...', allUsers);
-
-        console.log('Calling createInitialUsers!');
-        const initialUsers = await createInitialUsers();
-        console.log('Here are your users!', initialUsers)
-
-        console.log('Calling createInitialActivities!');
-        const initialActivities  = await createInitialActivities();
-        console.log('Here are your activities!', initialActivities)
 
         console.log('Done testing the database :)');
     } catch(error){
