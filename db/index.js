@@ -88,9 +88,14 @@ async function createUser({
         } catch (error) {
           throw error;
         }
-      }
+  }
 
-      
+  async function getAllRoutines() {
+
+    
+
+
+  }
       
 
       module.exports = {  
