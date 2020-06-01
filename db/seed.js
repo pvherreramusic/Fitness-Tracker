@@ -1,7 +1,7 @@
 const { client  } = require('./client')
 const { getUsers, createUser, createInitialUsers} = require('./users')
 const { createActivity, getAllActivities, createInitialActivities } = require('./activities')
-const { createRoutine, getAllRoutines, getAllRoutinesByUser, updateRoutine} = require('./routines')
+const { createRoutine, getAllRoutines, getAllRoutinesByUser, updateRoutine, createInitialRoutines} = require('./routines')
 const { addActivityToRoutine, updateRoutineActivity, destroyRoutineActivity } = require ('./routine_activities')
 
 const chalk = require('chalk')
@@ -79,15 +79,15 @@ async function testDB(){
     try{
         console.log('Testing the database now!');
 
-        const initialUsers = await createInitialUsers();
-        console.log('Here are your users!', initialUsers)
-
-        const initialActivities  = await createInitialActivities();
-        console.log('Here are your activities!', initialActivities)
-
+        await createInitialUsers();
         console.log('Calling getUsers!');
-        const allUsers = await getUsers();
+        allUsers = await getUsers()
         console.log('Here are all the users...', allUsers);
+        await createInitialRoutines()
+        allRoutines = await getAllRoutines()
+        console.log("Here are all your routines", allRoutines)
+        
+        
 
         console.log('Done testing the database :)');
     } catch(error){

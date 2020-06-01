@@ -35,4 +35,7 @@ async function updateRoutineActivity({ id, count, duration }){
 
 function destroyRoutineActivity(){}
 
+
+
+
 module.exports = {addActivityToRoutine, updateRoutineActivity, destroyRoutineActivity}

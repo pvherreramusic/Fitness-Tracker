@@ -2,25 +2,25 @@ const { client } = require('./client');
 
 async function getAllRoutines() {
     try {
-      const { rows:routines } = await client.query(`
+      const { rows } = await client.query(`
         SELECT * 
         FROM routines;
       `);
   
-      return []
+      return rows
     } catch (error) {
       throw error;
     }
   }
 
-async function createRoutine({ creatorId, public, name, goal }){
+async function createRoutine({ public, name, goal }){
     try {
      const { rows: [ routines ] } = await client.query(`
-       INSERT INTO routines(creatorId, public, name, goal) 
-       VALUES($1, $2, $3, $4)
+       INSERT INTO routines(public, name, goal) 
+       VALUES($1, $2, $3)
        ON CONFLICT (name) DO NOTHING 
        RETURNING *;
-     `, [creatorId, public, name, goal]);
+     `, [public, name, goal]);
    
      return routines;
    } catch (error) {
@@ -114,7 +114,10 @@ async function getPublicRoutinesByActivity({ activityId }){
 
 
 async function createInitialRoutines(){
-    try{
+      try{
+        // console.log(chalk.yellow('Routies'))
+        await createRoutine({ name:'Play a game of basketball', goal:'play 3x times a day'})
+
 
     }catch(error){
         console.log('Error creating routines!')
@@ -126,5 +129,5 @@ async function createInitialRoutines(){
 
 module.exports = {
     createRoutine, updateRoutine, getAllRoutines, getPublicRoutines, getPublicRoutinesByActivity, getPublicRoutinesByUser, getAllRoutinesByUser
-};
+    ,createInitialRoutines};
 

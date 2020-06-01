@@ -19,25 +19,30 @@ async function createUser({
     }
   };
 
-async function getUsers({ username, password }) {
-    try {
-        const { rows: [users] } = await client.query(`
-          SELECT *
-          FROM users
-          WHERE username=$1, password=$2
-        `, [username, password]);
-    
-        return users;
-      } catch (error) {
-        throw error;
-      }
-    };
+async function getUsers() {
+  try {
+    const { rows } = await client.query(`
+      SELECT username
+      FROM users;
+    `);
 
-    async function createInitialUsers(){
-        try{
-            console.log(chalk.yellow('Making you some users!'))
-           await createUser({ username:'calebjhenderson', password: 'codelyf3' });
-    
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+}
+  
+
+
+    async function createInitialUsers() {
+  try {
+    console.log("Starting to create users...");
+
+    await createUser({ 
+      username: 'Calebtherock', 
+      password: 'therock941',
+      
+    });
         }catch(error){
             console.log('Error creating users!')
             throw error}
