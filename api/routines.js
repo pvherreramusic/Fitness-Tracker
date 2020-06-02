@@ -1,17 +1,17 @@
 const express = require('express');
 const routinesRouter = express.Router();
-const requireUser = require('../users')
-const { updateRoutine } = require('../routines')
+const requireUser = require('../db/users')
+const { updateRoutine } = require('../db/routines')
 
 routinesRouter.use((next)=>{
     console.log('A request is being made to the routines router!');
     next();
 });
 
-//still need to return the activities with the routines here
+//still need to return the ACTIVITIES WITH the routines here
 routinesRouter.get('/',( res )=>{
    try{ 
-    const pubRoutines = await getPublicRoutines();
+    const pubRoutines =  getPublicRoutines();
     if(pubRoutines){
     res.send( pubRoutines )
     }
@@ -21,13 +21,13 @@ routinesRouter.get('/',( res )=>{
 });
 
 
-routinesRouter.post('/', requireUser, async ( req,res )=>{
+routinesRouter.post('/', requireUser, async( req,res )=>{
     const { name, goal } = req.body
     const routineData = {}
     try{
         routineData.name = name
         routineData.goal = goal
-        const newRoutine = await createRoutine( routineData )
+        const newRoutine = createRoutine( routineData )
         if( newRoutine ){
             res.send( newRoutine )
         }
@@ -36,11 +36,11 @@ routinesRouter.post('/', requireUser, async ( req,res )=>{
     }
 });
 
-//need to be the owner of the routine, so creatorId cant be null.
+//need to be the OWNER of the routine, so CREATORID cant be null.
 routinesRouter.patch('/:routineId',requireUser,(req,res)=>{
     const routineId = req.params
     try{
-        const updatedRoutine = await updateRoutine(routineId)
+        const updatedRoutine =  updateRoutine(routineId)
         if (updatedRoutine){
             res.send(updatedRoutine)
         }

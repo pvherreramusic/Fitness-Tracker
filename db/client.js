@@ -13,7 +13,7 @@ app.listen( PORT, () => {
 
 });
 
-// const apiRouter = require('./api');
+// const apiRouter = require('../api/index');
 // app.use('/api', apiRouter);
 
 module.exports = {

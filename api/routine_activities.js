@@ -1,7 +1,9 @@
 const express = require('express');
 const routine_activitiesRouter = express.Router();
-const requireUser = require('../users')
+const requireUser = require('../db/users')
 
+
+//NOT SETUP YET
 routine_activitiesRouter.use(next=>{
     console.log('A request is being made to the routine_activities router!')
     next();

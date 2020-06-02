@@ -2,7 +2,7 @@ const express = require('express');
 const bcrypt = require('bcrypt');
 const jwt = require ('jsonwebtoken');
 const usersRouter = express.Router();
-const { getUsers, createUser } = require('../db');
+const { getUsers, createUser } = require('../db/users');
 
 usersRouter.use((next)=>{
     console.log('A request is being made to the users router!');
@@ -15,7 +15,7 @@ usersRouter.post('/register', async (req, res, next) => {
   const SALT_COUNT = 10;
   try{
   bcrypt.hash(password, SALT_COUNT, function(err, hashedPassword) {
-    const newUser = await createUser({
+    const newUser =  createUser({
       username,
       password: hashedPassword // not the plaintext
     });

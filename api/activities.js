@@ -1,8 +1,8 @@
 const express = require('express');
 const activitiesRouter = express.Router();
-const requireUser = require('../users')
+const requireUser = require('../db/users')
 const { createActivity, updateActivity } = require('../activities')
-const { getPublicRoutinesByActivity } = require('../routines')
+const { getPublicRoutinesByActivity } = require('../db/routines')
 
 activitiesRouter.use((next)=>{
     console.log('A request is being made to our activities router!');
