@@ -1,5 +1,4 @@
 const { client } = require('./client')
-const  chalk  = require('chalk')
 
 async function createUser({ 
     username, 

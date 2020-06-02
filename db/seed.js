@@ -74,6 +74,7 @@ async function buildDB(){
 };
 
 //ERRORS: creatorId and public of routines are null.
+//  The last three routines helpers are returning empty
 
 async function testDB(){
     try{
@@ -129,5 +130,4 @@ async function testDB(){
 buildDB()
 .then(testDB)
 .catch(console.error)
-.finally(()=>client.end());
-//CLIENT ISN'T ENDING ?
+.finally(()=>process.exit());
