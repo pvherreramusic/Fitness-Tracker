@@ -47,6 +47,7 @@ async function createInitialActivities(){
     }
 };
 
+//>>>>>>>>>>>>>>>>NEED TO TEST>>>>>>>>>>>>>>>>>>>>>>>>>>>>
   async function updateActivity({ id, name, description }){
 
   const setString = Object.keys(name, description).map(

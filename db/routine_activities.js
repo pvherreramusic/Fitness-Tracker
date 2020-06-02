@@ -4,7 +4,7 @@ async function addActivityToRoutine({ routineId, activityId, count, duration }){
     
         try {
          const { rows: [ activityToRoutine ] } = await client.query(`
-           INSERT INTO routines(creatorId, public, name, goal) 
+           INSERT INTO routine_activities(id, public, name, goal) 
            VALUES($1, $2, $3, $4)
            RETURNING *;
          `, [routineId, activityId, count, duration]);
@@ -23,7 +23,7 @@ async function updateRoutineActivity({ id, count, duration }){
         try {
         if (setString.length > 0) {
           await client.query(`
-            UPDATE routines
+            UPDATE routine_activities
             SET ${ setString }
             WHERE id=${ id }
             RETURNING *;

@@ -74,7 +74,7 @@ async function buildDB(){
 };
 
 //ERRORS: creatorId and public of routines are null.
-//       client is not ending at the end of test
+
 async function testDB(){
     try{
         console.log('Testing the database now!');
@@ -104,7 +104,7 @@ async function testDB(){
         publicRoutines = await getPublicRoutines()
         console.log('Here are the public routines!', publicRoutines)
 
-        //Not sure why array is empty here.
+        //Not sure why arrays are empty here.
         console.log(chalk.yellow('Calling getAllRoutinesByUser...'))
         routinesByUser = await getAllRoutinesByUser({userId:null});
         console.log('Here are the users routines!', routinesByUser)
@@ -130,4 +130,4 @@ buildDB()
 .then(testDB)
 .catch(console.error)
 .finally(()=>client.end());
-//NEITHER CLIENT IS ENDING ?
+//CLIENT ISN'T ENDING ?
