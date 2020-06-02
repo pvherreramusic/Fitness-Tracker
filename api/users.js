@@ -1,5 +1,6 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
+const jwt = require ('jsonwebtoken');
 const usersRouter = express.Router();
 const { getUsers, createUser } = require('../db');
 
@@ -26,15 +27,25 @@ usersRouter.post('/register', async (req, res, next) => {
 };
 });
 
-//need to add a JWT 
+
 usersRouter.post('/login', async (req, res, next) => {
   const { username, password } = req.body;
+
+  if (!username || !password) {
+    next({
+      name: "MissingCredentialsError",
+      message: "Please supply both a username and password"
+    });
+  }
+
   const user = await getUser(username, password);
   const hashedPassword = user.password;
 
   bcrypt.compare(password, hashedPassword, function(err, passwordsMatch) {
+    
     if (passwordsMatch) {
-      
+      const token=jwt.sign({ username:user.username,id:user.id }, process.env.JWT_SECRET)
+        res.send({ message: "you're logged in!", token: `${ token } `});
     } else {
       throw err("Not working, dum dum", err);
     }
