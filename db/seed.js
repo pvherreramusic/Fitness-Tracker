@@ -1,7 +1,7 @@
 const { client  } = require('./client')
 const { getUsers, createUser, createInitialUsers} = require('./users')
 const { createActivity, getAllActivities, createInitialActivities } = require('./activities')
-const { createRoutine, getAllRoutines, getAllRoutinesByUser, updateRoutine, createInitialRoutines} = require('./routines')
+const { createRoutine, getAllRoutines, getAllRoutinesByUser, updateRoutine, createInitialRoutines, getPublicRoutines, getPublicRoutinesByUser, getPublicRoutinesByActivity} = require('./routines')
 const { addActivityToRoutine, updateRoutineActivity, destroyRoutineActivity } = require ('./routine_activities')
 
 const chalk = require('chalk')
@@ -48,8 +48,8 @@ async function createTables(){
 
         CREATE TABLE routine_activities(
             id SERIAL PRIMARY KEY,
-            "routineId" INTEGER REFERENCES routines,
-            "activityId" INTEGER REFERENCES activities,
+            "routineId" INTEGER REFERENCES routines UNIQUE,
+            "activityId" INTEGER REFERENCES activities UNIQUE,
             duration INTEGER,
             count INTEGER
         );
@@ -99,6 +99,23 @@ async function testDB(){
         console.log(chalk.yellow('Calling getAllRoutines...'))
         allRoutines = await getAllRoutines()
         console.log("Here are the routines!", allRoutines)
+
+        console.log(chalk.yellow('Calling getPublicRoutines...'))
+        publicRoutines = await getPublicRoutines()
+        console.log('Here are the public routines!', publicRoutines)
+
+        //Not sure why array is empty here.
+        console.log(chalk.yellow('Calling getAllRoutinesByUser...'))
+        routinesByUser = await getAllRoutinesByUser({userId:null});
+        console.log('Here are the users routines!', routinesByUser)
+
+        console.log(chalk.yellow('Calling getPublicRoutinesByUser...'))
+        pubRoutinesByUser = await getPublicRoutinesByUser({ creatorId:null})
+        console.log('Here are the public routines by that user!', pubRoutinesByUser)
+
+        console.log(chalk.yellow('Calling getPublicRoutinesByActivity...'))
+        pubRoutinesByActivity = await getPublicRoutinesByActivity({activityId:1})
+        console.log('Here are the public routines with that activity!', pubRoutinesByActivity)
         
         
 

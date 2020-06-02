@@ -1,18 +1,5 @@
 const { client } = require('./client');
 
-//we need to include the activities with the routines were returning.
-async function getAllRoutines() {
-    try {
-      const { rows } = await client.query(`
-        SELECT * 
-        FROM routines;
-      `);
-      return rows
-    } catch (error) {
-      throw error;
-    }
-};
-
 //I think we'll need to add the activities to a routine here as a property activities=[]
 async function createRoutine({  
   name, 
@@ -32,13 +19,42 @@ async function createRoutine({
    }
 };
 
+//we need to include the activities with the routines were returning.
+async function getAllRoutines() {
+  try {
+    const { rows } = await client.query(`
+      SELECT * 
+      FROM routines;
+    `);
+    return rows
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+//We need to include the activities that the routines contain here
+async function getPublicRoutines(){
+  try {
+    const { rows } = await client.query(`
+      SELECT *
+      FROM routines
+      WHERE public=true;
+    `);
+
+    return { rows }
+  } catch (error) {
+    throw error;
+  }
+};
+
+
 async function createInitialRoutines(){
   try{
    
-    await createRoutine({ name:'Play a game of basketball', goal:'play 3x times a day'})
+    await createRoutine({ name:'Play a game of basketball', goal:'play 3x times a day', public:false})
 
     await createRoutine({name:'Running', goal:'Go for a jog at least twice per week!', public:true})
-
 
     //public is defaulting to null instead of false
     //creatorId is null instead of referencing users.
@@ -55,77 +71,48 @@ module.exports = {
     ,createInitialRoutines};
 
 
-//>>>>>>>>>>>>>STILL NEED TO TEST>>>>>>>>>>>>>>>>>>>>>>>
-async function updateRoutine({ id, public, name, goal }) {
-      const setString = Object.keys(name, goal, public).map(
-        (key, index) => `"${ key }"=$${ index + 1 }`
-      ).join(', ');
+
     
-        try {
-        if (setString.length > 0) {
-          await client.query(`
-            UPDATE activities
-            SET ${ setString }
-            WHERE id=${ id }
-            RETURNING *;
-          `, Object.values(name, goal, public));
-       }
-        } catch (error) {
-            throw error;
-      }   
- };
-    
- 
- 
-async function getAllRoutinesByUser({ username }) {
+ // Returning an empty array...
+async function getAllRoutinesByUser({ userId }) {
      try {
        const { rows: routines } = await client.query(`
-         SELECT id 
+         SELECT id
          FROM routines 
-         WHERE "authorId"=${ username };
+         WHERE "creatorId"=${ userId };
        `);
-   
-       const userroutine = await Promise.all(routines.map(
-         routine => getUser( routine.username )
+    
+       const userRoutines = await Promise.all(routines.map(
+         routine => getAllRoutinesByUser( {creatorId} )
        ));
-       return userroutine;
+       return userRoutines;
      } catch (error) {
        throw error;
      }
  };
  
- //We need to include the activities that the routines contain here
-async function getPublicRoutines(){
-     try {
-       const { rows } = await client.query(`
-         SELECT *
-         FROM routines
-         WHERE public=true;
-       `);
-   
-       return { rows }
-     } catch (error) {
-       throw error;
-     }
- };
  
-async function getPublicRoutinesByUser({username}) {
+ //Also returning an empty array.
+async function getPublicRoutinesByUser({creatorId}) {
      try {
-       const { rows } = await client.query(`
+       const { rows:routines } = await client.query(`
        SELECT *
        FROM routines
-       WHERE username=${username} 
+       WHERE "creatorId"=${creatorId} 
        AND public=true
        `);
+       const publicUserRoutines = await Promise.all(routines.map(
+        routine => getAllRoutinesByUser( {creatorId} )
+      ));
+      return publicUserRoutines;
    
-       return { rows }
      } catch (error) {
        throw error;
      }
  };
    
+ //Also returning an empty array.
 async function getPublicRoutinesByActivity({ activityId }){
-    ///May not work because it has not been tested.
      try {
        const { rows: publicRoutines } = await client.query(`
          SELECT *
@@ -135,8 +122,28 @@ async function getPublicRoutinesByActivity({ activityId }){
          WHERE routines.public=true 
          AND routine_activities."activityId"=$1
        `, [activityId]);
-       console.log(publicRoutines)
+        return publicRoutines
      } catch (error) {
        throw error;
      }
  }; 
+
+ //>>>>>>>>>>>>>STILL NEED TO TEST>>>>>>>>>>>>>>>>>>>>>>>
+async function updateRoutine({ id, public, name, goal }) {
+  const setString = Object.keys(name, goal, public).map(
+    (key, index) => `"${ key }"=$${ index + 1 }`
+  ).join(', ');
+
+    try {
+    if (setString.length > 0) {
+      await client.query(`
+        UPDATE activities
+        SET ${ setString }
+        WHERE id=${ id }
+        RETURNING *;
+      `, Object.values(name, goal, public));
+   }
+    } catch (error) {
+        throw error;
+  }   
+};

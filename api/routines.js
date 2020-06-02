@@ -35,6 +35,7 @@ routinesRouter.post('/', requireUser, async ( req,res )=>{
         throw error
     }
 });
+
 //need to be the owner of the routine, so creatorId cant be null.
 routinesRouter.patch('/:routineId',requireUser,(req,res)=>{
     const routineId = req.params
@@ -53,7 +54,8 @@ routinesRouter.delete('/:routineId', requireUser,(req,res)=>{
             //HARD DELETE this routineId somehow
         }
     }catch(error){throw error}
-})
+});
+
 routinesRouter.post('/:routineId/actiivites',(req,res)=>{
     //Attach a single activity to a routine. Prevent duplicates on routineId and activityId
 });

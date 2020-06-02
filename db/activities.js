@@ -47,26 +47,27 @@ async function createInitialActivities(){
     }
 };
 
+  async function updateActivity({ id, name, description }){
+
+  const setString = Object.keys(name, description).map(
+    (key, index) => `"${ key }"=$${ index + 1 }`
+  ).join(', ');
+
+    try {
+    if (setString.length > 0) {
+      await client.query(`
+        UPDATE activities
+        SET ${ setString }
+        WHERE id=${ id }
+        RETURNING *;
+      `, Object.values(name, description));
+   }
+    } catch (error) {
+        throw error;
+  }
+}
+
 module.exports = {
-    createActivity, getAllActivities, createInitialActivities
+    createActivity, getAllActivities, createInitialActivities, updateActivity
 };
 
-//   async function updateActivity({ id, name, description })
-
-//   const setString = Object.keys(name, description).map(
-//     (key, index) => `"${ key }"=$${ index + 1 }`
-//   ).join(', ');
-
-//     try {
-//     // update any fields that need to be updated
-//     if (setString.length > 0) {
-//       await client.query(`
-//         UPDATE activities
-//         SET ${ setString }
-//         WHERE id=${ id }
-//         RETURNING *;
-//       `, Object.values(name, description));
-//    }
-//     } catch (error) {
-//         throw error;
-//   }
