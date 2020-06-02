@@ -1,23 +1,26 @@
 const express = require('express');
 const routinesRouter = express.Router();
 const requireUser = require('../users')
+const { updateRoutine } = require('../routines')
 
 routinesRouter.use((next)=>{
     console.log('A request is being made to the routines router!');
     next();
 });
 
-//in here will be something like getAllRoutines
+//still need to return the activities with the routines here
 routinesRouter.get('/',( res )=>{
    try{ 
-    const routines = await getAllRoutines();
-    res.send(routines)
+    const pubRoutines = await getPublicRoutines();
+    if(pubRoutines){
+    res.send( pubRoutines )
+    }
    }catch(error){
        throw error
    }
 });
 
-//And here would be calling createNewRoutine
+
 routinesRouter.post('/', requireUser, async ( req,res )=>{
     const { name, goal } = req.body
     const routineData = {}
@@ -32,8 +35,30 @@ routinesRouter.post('/', requireUser, async ( req,res )=>{
         throw error
     }
 });
+//need to be the owner of the routine, so creatorId cant be null.
+routinesRouter.patch('/:routineId',requireUser,(req,res)=>{
+    const routineId = req.params
+    try{
+        const updatedRoutine = await updateRoutine(routineId)
+        if (updatedRoutine){
+            res.send(updatedRoutine)
+        }
+    }catch(error){throw error}
+});
 
-//call edit routine once its working.
-routinesRouter.patch('/:routineId',(req,res,err)=>{});
+routinesRouter.delete('/:routineId', requireUser,(req,res)=>{
+    const routineId = req.params
+    try{
+        if (routineId){
+            //HARD DELETE this routineId somehow
+        }
+    }catch(error){throw error}
+})
+routinesRouter.post('/:routineId/actiivites',(req,res)=>{
+    //Attach a single activity to a routine. Prevent duplicates on routineId and activityId
+});
+
+
+
 
 module.exports = routinesRouter;

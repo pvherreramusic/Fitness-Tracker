@@ -1,5 +1,6 @@
 const { client } = require('./client');
 
+//we need to include the activities with the routines were returning.
 async function getAllRoutines() {
     try {
       const { rows } = await client.query(`
@@ -12,7 +13,12 @@ async function getAllRoutines() {
     }
 };
 
-async function createRoutine({  name, goal, public }){
+//I think we'll need to add the activities to a routine here as a property activities=[]
+async function createRoutine({  
+  name, 
+  goal, 
+  public
+}){
     try {
      const { rows: [ routines ] } = await client.query(`
        INSERT INTO routines(name, goal, public) 
@@ -88,6 +94,7 @@ async function getAllRoutinesByUser({ username }) {
      }
  };
  
+ //We need to include the activities that the routines contain here
 async function getPublicRoutines(){
      try {
        const { rows } = await client.query(`
