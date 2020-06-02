@@ -1,4 +1,3 @@
-//These should be our routers
 const express = require('express');
 const apiRouter = express.Router();
 
@@ -8,7 +7,7 @@ apiRouter.use((req,res,next)=>{
   //this will only need to be for the logged in functions
 });
 
-apiRouter.use((req, res, next) => {
+apiRouter.use((req, next) => {
   if (req.user) {
     console.log("User is set:", req.user);
   }
@@ -16,8 +15,7 @@ apiRouter.use((req, res, next) => {
   next();
 });
 
-
-
+//Our routers for each file.
 const usersRouter = require('./users');
 apiRouter.use('/users', usersRouter);
 
@@ -28,8 +26,7 @@ const activitiesRouter = require('./activities');
 apiRouter.use('/activities', activitiesRouter);
 
 
-
-apiRouter.use((error, req, res, next) => {
+apiRouter.use((error, res) => {
     res.send(error);
   });
 

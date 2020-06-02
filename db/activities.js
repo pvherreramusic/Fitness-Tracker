@@ -33,6 +33,24 @@ async function getAllActivities() {
         }
   }
 
+
+
+async function createInitialActivities(){
+    try{
+        
+        await createActivity({ name:'Basketball', description:'Game of horse, anyone?'})
+
+        await createActivity({name:'Skateboarding', description:'Game of skate instead?'})
+
+    }catch(error){
+        throw error
+    }
+};
+
+module.exports = {
+    createActivity, getAllActivities, createInitialActivities
+};
+
 //   async function updateActivity({ id, name, description })
 
 //   const setString = Object.keys(name, description).map(
@@ -52,17 +70,3 @@ async function getAllActivities() {
 //     } catch (error) {
 //         throw error;
 //   }
-
-async function createInitialActivities(){
-    try{
-        console.log(chalk.yellow('Giving them some activities!'))
-        await createActivity({ name:'basketball', description:'Game of horse ,anyone?'})
-
-    }catch(error){
-        throw error
-    }
-};
-
-module.exports = {
-    createActivity, getAllActivities, createInitialActivities
-};

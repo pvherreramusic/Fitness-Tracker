@@ -8,44 +8,44 @@ usersRouter.use((next)=>{
     next();
 });
 
-usersRouter.get('/', async (req, res) => {
-    const users = await getAllUsers();
-    res.send({
-      users
-    });
-  });
-
 
 usersRouter.post('/register', async (req, res, next) => {
-    const { username, password } = req.body;
-    const SALT_COUNT = 10;
-try{
-bcrypt.hash(password, SALT_COUNT, function(err, hashedPassword) {
-  const newUser = await createUser({
-    username,
-    password: hashedPassword // not the plaintext
+  const { username, password } = req.body;
+  const SALT_COUNT = 10;
+  try{
+  bcrypt.hash(password, SALT_COUNT, function(err, hashedPassword) {
+    const newUser = await createUser({
+      username,
+      password: hashedPassword // not the plaintext
+    });
+    console.log('Thanks for signing up!')
+    res.send(newUser); 
   });
-  console.log('Thanks for signing up!')
-  res.send(newUser); 
-});
-}catch(error){
-    console.error(error)
+  }catch(error){
+      console.error(error)
 };
+});
 
-
+//need to add a JWT 
 usersRouter.post('/login', async (req, res, next) => {
-const { username, password } = req.body;
-const user = await getUser(username, password);
-const hashedPassword = user.password;
+  const { username, password } = req.body;
+  const user = await getUser(username, password);
+  const hashedPassword = user.password;
 
-bcrypt.compare(password, hashedPassword, function(err, passwordsMatch) {
-  if (passwordsMatch) {
-    
-  } else {
-    throw err("Not working, dum dum", err);
-  }
+  bcrypt.compare(password, hashedPassword, function(err, passwordsMatch) {
+    if (passwordsMatch) {
+      
+    } else {
+      throw err("Not working, dum dum", err);
+    }
+    });
 });
 
-})
+usersRouter.get('/:username/routines', async ( res ) => {
+  const userRoutines = await getPublicRoutinesByUser();
+  res.send({
+    userRoutines
+  });
 });
+
 module.exports = usersRouter;

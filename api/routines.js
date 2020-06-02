@@ -1,13 +1,14 @@
 const express = require('express');
 const routinesRouter = express.Router();
+const requireUser = require('../users')
 
-routinesRouter.use((req,res,next)=>{
+routinesRouter.use((next)=>{
     console.log('A request is being made to the routines router!');
     next();
 });
 
 //in here will be something like getAllRoutines
-routinesRouter.get('/',(req,res,err)=>{
+routinesRouter.get('/',( res )=>{
    try{ 
     const routines = await getAllRoutines();
     res.send(routines)
@@ -17,9 +18,22 @@ routinesRouter.get('/',(req,res,err)=>{
 });
 
 //And here would be calling createNewRoutine
-routinesRouter.post('/',(req,res,err)=>{});
+routinesRouter.post('/', requireUser, async ( req,res )=>{
+    const { name, goal } = req.body
+    const routineData = {}
+    try{
+        routineData.name = name
+        routineData.goal = goal
+        const newRoutine = await createRoutine( routineData )
+        if( newRoutine ){
+            res.send( newRoutine )
+        }
+    }catch(error){
+        throw error
+    }
+});
 
-//something like editRoutine
+//call edit routine once its working.
 routinesRouter.patch('/:routineId',(req,res,err)=>{});
 
 module.exports = routinesRouter;

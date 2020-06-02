@@ -17,7 +17,7 @@ async function createUser({
     } catch (error) {
       throw error;
     }
-  };
+};
 
 async function getUsers() {
   try {
@@ -30,25 +30,35 @@ async function getUsers() {
   } catch (error) {
     throw error;
   }
-}
+};
   
 
-
-    async function createInitialUsers() {
+async function createInitialUsers(){
   try {
-    console.log("Starting to create users...");
-
     await createUser({ 
       username: 'Calebtherock', 
       password: 'therock941',
-      
     });
-        }catch(error){
-            console.log('Error creating users!')
-            throw error}
-    };
+    await createUser({ 
+      username: 'PatrickStar', 
+      password: 'underarock',
+    });
+  } catch(error){
+      console.log('Error creating users!')
+      throw error}
+};
+
+function requireUser(req, res, next) {
+  if(!req.user) {
+      next({
+          name: "MissingUserError",
+          message: "You must be logged in to perform this action"
+      });
+  }
+  next();
+}
     
 
 module.exports = {
-    createUser, getUsers, createInitialUsers
+    createUser, getUsers, createInitialUsers, requireUser
 }

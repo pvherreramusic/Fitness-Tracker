@@ -73,19 +73,32 @@ async function buildDB(){
     }
 };
 
-//ERRORS:Users and activities returned are undefined , failing the other test
+//ERRORS: creatorId and public of routines are null.
 //       client is not ending at the end of test
 async function testDB(){
     try{
         console.log('Testing the database now!');
 
+        console.log(chalk.green('Creating initial users'))
         await createInitialUsers();
-        console.log('Calling getUsers!');
+
+        console.log(chalk.yellow('Calling getUsers...'));
         allUsers = await getUsers()
-        console.log('Here are all the users...', allUsers);
+        console.log('Here are the users!', allUsers);
+
+        console.log(chalk.green('Creating initial activities.'))
+        await createInitialActivities();
+
+        console.log(chalk.yellow('Calling getAllActivities...'))
+        allActivities = await getAllActivities();
+        console.log('Here are the activities!', allActivities)
+
+        console.log(chalk.green('Creating Initial Routines.'))
         await createInitialRoutines()
+
+        console.log(chalk.yellow('Calling getAllRoutines...'))
         allRoutines = await getAllRoutines()
-        console.log("Here are all your routines", allRoutines)
+        console.log("Here are the routines!", allRoutines)
         
         
 
