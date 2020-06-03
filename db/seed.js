@@ -73,7 +73,7 @@ async function buildDB(){
     }
 };
 
-//ERRORS: creatorId and public of routines are null.
+
 //  The last three routines helpers are returning empty
 
 async function testDB(){
@@ -106,19 +106,20 @@ async function testDB(){
         console.log('Here are the public routines!', publicRoutines)
 
 
-        //Not sure why arrays are empty here.
+    
         
         console.log(chalk.yellow('Calling getAllRoutinesByUser...'))
-        routinesByUser = await getAllRoutinesByUser( { username: "Patrickstar"} );
+        routinesByUser = await getAllRoutinesByUser( { username: "PatrickStar"} );
         console.log('Here are the users routines!', routinesByUser)
 
-        console.log(chalk.yellow('Calling getPublicRoutinesByUser...'))
-        pubRoutinesByUser = await getPublicRoutinesByUser({ creatorId:1})
-        console.log('Here are the public routines by that user!', pubRoutinesByUser)
+        //     //Not sure why arrays are empty here.
+        // console.log(chalk.yellow('Calling getPublicRoutinesByUser...'))
+        // pubRoutinesByUser = await getPublicRoutinesByUser({ creatorId:1})
+        // console.log('Here are the public routines by that user!', pubRoutinesByUser)
 
-        console.log(chalk.yellow('Calling getPublicRoutinesByActivity...'))
-        pubRoutinesByActivity = await getPublicRoutinesByActivity({activityId:1})
-        console.log('Here are the public routines with that activity!', pubRoutinesByActivity)
+        // console.log(chalk.yellow('Calling getPublicRoutinesByActivity...'))
+        // pubRoutinesByActivity = await getPublicRoutinesByActivity({activityId:1})
+        // console.log('Here are the public routines with that activity!', pubRoutinesByActivity)
         
         
 
