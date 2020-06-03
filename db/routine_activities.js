@@ -34,7 +34,7 @@ async function updateRoutineActivity({ id, count, duration }){
       }   
  };
 
-
+//ADD TO ROUTE ONCE WRITTEN
 function destroyRoutineActivity(){}
 
 

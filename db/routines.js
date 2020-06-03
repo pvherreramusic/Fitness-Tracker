@@ -1,18 +1,19 @@
 const { client } = require('./client');
 
 //I think we'll need to add the activities to a routine here as a property activities=[]
-async function createRoutine({  
+async function createRoutine({
+  creatorId,  
   name, 
-  goal, 
-  public
+  goal,
+  public = false
 }){
     try {
      const { rows: [ routines ] } = await client.query(`
-       INSERT INTO routines(name, goal, public) 
-       VALUES($1, $2, $3)
+       INSERT INTO routines( "creatorId", name, goal, public ) 
+       VALUES($1, $2, $3, $4)
        ON CONFLICT (name) DO NOTHING 
        RETURNING *;
-     `, [name, goal, public ]);
+     `, [creatorId, name, goal, public]);
      return routines;
    } catch (error) {
      throw error;
@@ -52,12 +53,10 @@ async function getPublicRoutines(){
 async function createInitialRoutines(){
   try{
    
-    await createRoutine({ name:'Play a game of basketball', goal:'play 3x times a day', public:false})
+    await createRoutine({  creatorId:1, name:'Play a game of basketball', goal:'play 3x times a day'})
 
-    await createRoutine({name:'Running', goal:'Go for a jog at least twice per week!', public:true})
+    await createRoutine({ creatorId:2, name:'Running', goal:'Go for a jog at least twice per week!', public:true})
 
-    //public is defaulting to null instead of false
-    //creatorId is null instead of referencing users.
 
   } catch(error){
     console.log('Error creating routines!')
@@ -74,18 +73,38 @@ module.exports = {
 
     
  // Returning an empty array...
-async function getAllRoutinesByUser({ userId }) {
-     try {
+async function getAllRoutinesByUser({ username }) {
+     let name = username
+    try {
+       // Get a user
+       const { rows:[user] } = await client.query(`
+        SELECT users 
+        FROM users
+        WHERE $1
+       `, [name])
+       
+      //Get that users routines
        const { rows: routines } = await client.query(`
          SELECT id
          FROM routines 
-         WHERE "creatorId"=${ userId };
-       `);
-    
-       const userRoutines = await Promise.all(routines.map(
-         routine => getAllRoutinesByUser( {creatorId} )
-       ));
-       return userRoutines;
+         WHERE "creatorId"=${ user.id }
+       `)
+      //Loop over routines, for each routine
+      // find the activities for that routine
+        // routine.activities = activities (the ones we just found) 
+
+     const { rows:activities } = await client.query(`
+          SELECT activities
+          FROM activities
+          WHERE ${ routines.activities } = name
+         `)
+
+
+      routines.forEach(function(routine){
+        routine.activities = activities
+        return routines;
+      })
+      //once this is working, make a helper function to use in the other ones that need activities.
      } catch (error) {
        throw error;
      }

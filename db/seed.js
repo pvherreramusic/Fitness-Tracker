@@ -41,7 +41,7 @@ async function createTables(){
         CREATE TABLE routines(
             id SERIAL PRIMARY KEY,
             "creatorId" INTEGER REFERENCES users,
-            public BOOLEAN DEFAULT FALSE,
+            public BOOLEAN DEFAULT false,
             name VARCHAR(255) UNIQUE NOT NULL,
             goal TEXT NOT NULL
         );
@@ -105,13 +105,15 @@ async function testDB(){
         publicRoutines = await getPublicRoutines()
         console.log('Here are the public routines!', publicRoutines)
 
+
         //Not sure why arrays are empty here.
+        
         console.log(chalk.yellow('Calling getAllRoutinesByUser...'))
-        routinesByUser = await getAllRoutinesByUser({userId:null});
+        routinesByUser = await getAllRoutinesByUser( { username: "Patrickstar"} );
         console.log('Here are the users routines!', routinesByUser)
 
         console.log(chalk.yellow('Calling getPublicRoutinesByUser...'))
-        pubRoutinesByUser = await getPublicRoutinesByUser({ creatorId:null})
+        pubRoutinesByUser = await getPublicRoutinesByUser({ creatorId:1})
         console.log('Here are the public routines by that user!', pubRoutinesByUser)
 
         console.log(chalk.yellow('Calling getPublicRoutinesByActivity...'))

@@ -4,7 +4,7 @@ const apiRouter = express.Router();
 
 apiRouter.use((req,res,next)=>{
   //check for authorization somehow here. that would set the req.user
-  //this will only need to be for the logged in functions
+  
 });
 
 apiRouter.use((req, next) => {
