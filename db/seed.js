@@ -1,6 +1,6 @@
 const { client  } = require('./client')
 const { getUsers, createUser, createInitialUsers} = require('./users')
-const { createActivity, getAllActivities, createInitialActivities } = require('./activities')
+const { createActivity, getAllActivities, createInitialActivities, updateActivity } = require('./activities')
 const { createRoutine, getAllRoutines, getAllRoutinesByUser, updateRoutine, createInitialRoutines, getPublicRoutines, getPublicRoutinesByUser, getPublicRoutinesByActivity} = require('./routines')
 const { addActivityToRoutine, updateRoutineActivity, destroyRoutineActivity } = require ('./routine_activities')
 
@@ -122,7 +122,15 @@ async function testDB(){
         console.log(chalk.yellow('Calling updateRoutineActivty...'))
         updatedRoutine = await updateRoutineActivity({id:1, count:2, duration:2})
         console.log('Here is your updated routine!', updatedRoutine)
-        //undefined?
+
+        console.log(chalk.yellow('Calling updateActivity'))
+        updatedActivity = await updateActivity({id:1, name: 'Skating', description:'Fine, we can just cruise.'})
+        console.log('Here is your updated activity!', updatedActivity)
+
+        console.log(chalk.yellow('Calling updateRoutine'))
+        updatedRoutine = await updateRoutine({id:1, public:true, name:'Basketball', goal: 'Once is enough'})
+        console.log('Here is the updated routine!', updatedRoutine )
+       
 
         
         console.log('Done testing the database :)');

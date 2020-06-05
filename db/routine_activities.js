@@ -16,21 +16,19 @@ async function addActivityToRoutine({ routineId, activityId, count, duration }){
        }
     };
 
-  //>>>>>>>>>>>>>>>>>STILL NEED TO TEST>>>>>>>>>>>>>>>>>>>>>>>
+  
 async function updateRoutineActivity({ id, count, duration }){
-    const setString = Object.keys(count, duration).map(
+    const setString = Object.keys({count, duration}).map(
         (key, index) => `"${ key }"=$${ index + 1 }`
       ).join(', ');
-    
         try {
         if (setString.length > 0) {
-         updatedRoutine= await client.query(`
+         const { rows: [updatedRoutine] } = await client.query(`
             UPDATE routine_activities
             SET ${ setString }
             WHERE id=${ id }
             RETURNING *;
-          `, Object.values(count, duration));
-
+          `, Object.values({count, duration}));
           return updatedRoutine
        }
       
@@ -39,7 +37,7 @@ async function updateRoutineActivity({ id, count, duration }){
       }   
  };
 
-//ADD TO ROUTE ONCE WRITTEN
+//>>>>>>>>>>>>>>>>>STILL NEED TO TEST>>>>>>>>>>>>>>>>>>>>>>>
 async function destroyRoutineActivity(activityId){
   try{
   await client.query(`
@@ -52,8 +50,6 @@ catch(error){
     throw error
   }
 }
-
-
 
 
 module.exports = {addActivityToRoutine, updateRoutineActivity, destroyRoutineActivity}

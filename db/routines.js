@@ -147,20 +147,21 @@ async function getPublicRoutinesByActivity({ activityId }){
      }
  }; 
 
- //>>>>>>>>>>>>>STILL NEED TO TEST>>>>>>>>>>>>>>>>>>>>>>>
-async function updateRoutine({ id, public, name, goal }) {
-  const setString = Object.keys(name, goal, public).map(
+
+async function updateRoutine({ id, public, name, goal}) {
+  const setString = Object.keys({id, public, name, goal}).map(
     (key, index) => `"${ key }"=$${ index + 1 }`
   ).join(', ');
 
     try {
     if (setString.length > 0) {
-      await client.query(`
-        UPDATE activities
+     const {rows:updatedRoutine} = await client.query(`
+        UPDATE routines
         SET ${ setString }
         WHERE id=${ id }
         RETURNING *;
-      `, Object.values(name, goal, public));
+      `, Object.values({id, public, name, goal}));
+      return updatedRoutine
    }
     } catch (error) {
         throw error;
@@ -168,11 +169,6 @@ async function updateRoutine({ id, public, name, goal }) {
 };
 
 
-
-
-
-
-//HELPER TO ADD ACTIVITIES
 async function getActivitiesByRoutineId(id){
   const { rows:activities } = await client.query(`
         SELECT *

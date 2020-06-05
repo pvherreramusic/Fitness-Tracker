@@ -47,21 +47,22 @@ async function createInitialActivities(){
     }
 };
 
-//>>>>>>>>>>>>>>>>NEED TO TEST>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
   async function updateActivity({ id, name, description }){
 
-  const setString = Object.keys(name, description).map(
+  const setString = Object.keys({name, description}).map(
     (key, index) => `"${ key }"=$${ index + 1 }`
   ).join(', ');
 
     try {
     if (setString.length > 0) {
-      await client.query(`
+      const {rows: updatedActivty } = await client.query(`
         UPDATE activities
         SET ${ setString }
         WHERE id=${ id }
         RETURNING *;
-      `, Object.values(name, description));
+      `, Object.values({name, description}));
+      return updatedActivty
    }
     } catch (error) {
         throw error;
