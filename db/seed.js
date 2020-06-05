@@ -1,7 +1,7 @@
 const { client  } = require('./client')
 const { getUsers, createUser, createInitialUsers} = require('./users')
 const { createActivity, getAllActivities, createInitialActivities, updateActivity } = require('./activities')
-const { createRoutine, getAllRoutines, getAllRoutinesByUser, updateRoutine, createInitialRoutines, getPublicRoutines, getPublicRoutinesByUser, getPublicRoutinesByActivity} = require('./routines')
+const { createRoutine, getAllRoutines, getAllRoutinesByUser, updateRoutine, createInitialRoutines, getPublicRoutines, getPublicRoutinesByUser, getPublicRoutinesByActivity, destroyRoutine} = require('./routines')
 const { addActivityToRoutine, updateRoutineActivity, destroyRoutineActivity } = require ('./routine_activities')
 
 const chalk = require('chalk')
@@ -108,11 +108,11 @@ async function testDB(){
         console.log('Here are the users routines!', routinesByUser)
 
         console.log(chalk.yellow('Calling getPublicRoutinesByUser...'))
-        pubRoutinesByUser = await getPublicRoutinesByUser({ creatorId:1})
+        pubRoutinesByUser = await getPublicRoutinesByUser({ creatorId:2})
         console.log('Here are the public routines by that user!', pubRoutinesByUser)
 
         console.log(chalk.yellow('Calling getPublicRoutinesByActivity...'))
-        pubRoutinesByActivity = await getPublicRoutinesByActivity({activityId:1})
+        pubRoutinesByActivity = await getPublicRoutinesByActivity({activityId:2})
         console.log('Here are the public routines with that activity!', pubRoutinesByActivity)
 
         console.log(chalk.yellow('Calling addActivityToRoutine...'))
@@ -130,6 +130,17 @@ async function testDB(){
         console.log(chalk.yellow('Calling updateRoutine'))
         updatedRoutine = await updateRoutine({id:1, public:true, name:'Basketball', goal: 'Once is enough'})
         console.log('Here is the updated routine!', updatedRoutine )
+
+        console.log(chalk.yellow('Calling destroyRoutine!'))
+        await destroyRoutine(2)
+        routines = await getAllRoutines()
+        console.log('Here are the routines now.', routines)
+
+        console.log(chalk.yellow('Calling destroyRoutineActivity'))
+        await destroyRoutineActivity(2)
+        routines = await getAllRoutines()
+        console.log('Here are the routines now.', routines)
+
        
 
         

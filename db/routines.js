@@ -1,6 +1,6 @@
 const { client } = require('./client');
 
-//Activities will get added in addActivityToRoutine(){}
+
 async function createRoutine({
   creatorId,  
   name, 
@@ -70,42 +70,31 @@ async function createInitialRoutines(){
 };
 
 
-module.exports = {
-    createRoutine, updateRoutine, getAllRoutines, getPublicRoutines, getPublicRoutinesByActivity, getPublicRoutinesByUser, getAllRoutinesByUser
-    ,createInitialRoutines};
 
-
-
-    
- 
 async function getAllRoutinesByUser({ username }) {
      let name = username
      console.log(name,username)
     try {
-       // Get a user
+       
        const { rows:[user] } = await client.query(`
         SELECT * 
         FROM users
         WHERE username = $1
        `, [name])
        
-      //Get that users routines
+      
       console.log(user)
        const { rows: routines } = await client.query(`
          SELECT *
          FROM routines 
          WHERE "creatorId"=${ user.id }
        `)
-      // Loop over routines, for each routine
-      // find the activities for that routine
-        // routine.activities = activities (the ones we just found) 
 
       for(let routine of routines){
         routine.activities = await getActivitiesByRoutineId(routine.id);
       };
     
       return routines;
-      //once this is working, make a helper function to use in the other ones that need activities.
      } catch (error) {
        throw error;
      }
@@ -178,5 +167,23 @@ async function getActivitiesByRoutineId(id){
        `,[id])
         
   return activities
+  //this is being returned as just an object
 }
+
+
+  async function destroyRoutine(id){
+    try{
+      await client.query(`
+      DELETE FROM routines
+      WHERE "id" = $1
+      `, [id]);
+      }
+    catch(error){
+        throw error
+      }
+    }
+
   
+module.exports = {
+  createRoutine, updateRoutine, getAllRoutines, getPublicRoutines, getPublicRoutinesByActivity, getPublicRoutinesByUser, getAllRoutinesByUser
+  ,createInitialRoutines, destroyRoutine};
