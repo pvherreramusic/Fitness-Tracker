@@ -3,7 +3,7 @@ const routine_activitiesRouter = express.Router();
 const requireUser = require('../db/users')
 
 
-//IN TESTING
+
 routine_activitiesRouter.use(next=>{
     console.log('A request is being made to the routine_activities router!')
     next();

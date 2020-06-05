@@ -14,13 +14,22 @@ usersRouter.post('/register', async (req, res, next) => {
   const { username, password } = req.body;
   const SALT_COUNT = 10;
   try{
+
   bcrypt.hash(password, SALT_COUNT, function(err, hashedPassword) {
     const newUser =  createUser({
       username,
       password: hashedPassword // not the plaintext
     });
+
+    const token = jwt.sign({ 
+      id: newUser.id, 
+      username
+    }, process.env.JWT_SECRET, {
+      expiresIn: '1w'
+    });
+
     console.log('Thanks for signing up!')
-    res.send(newUser); 
+    res.send(token); 
   });
   }catch(error){
       console.error(error)
@@ -37,7 +46,7 @@ usersRouter.post('/login', async (req, res, next) => {
       message: "Please supply both a username and password"
     });
   }
-
+  try{
   const user = await getUser(username, password);
   const hashedPassword = user.password;
 
@@ -47,9 +56,16 @@ usersRouter.post('/login', async (req, res, next) => {
       const token=jwt.sign({ username:user.username,id:user.id }, process.env.JWT_SECRET)
         res.send({ message: "you're logged in!", token: `${ token } `});
     } else {
-      throw err("Not working, dum dum", err);
+      next({ 
+        name: 'IncorrectCredentialsError', 
+        message: 'Username or password is incorrect'
+      });
     }
-    });
+  });
+  } catch(error) {
+    console.log(error);
+    next(error);
+  }
 });
 
 usersRouter.get('/:username/routines', async ( res ) => {

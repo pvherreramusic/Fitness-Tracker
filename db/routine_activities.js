@@ -37,7 +37,7 @@ async function updateRoutineActivity({ id, count, duration }){
       }   
  };
 
-//>>>>>>>>>>>>>>>>>STILL NEED TO TEST>>>>>>>>>>>>>>>>>>>>>>>
+
 async function destroyRoutineActivity(activityId){
   try{
   await client.query(`

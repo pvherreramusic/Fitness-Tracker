@@ -56,8 +56,26 @@ function requireUser(req, res, next) {
   }
   next();
 }
+
+async function getUserById(id){
+  try{ 
+    const { rows:[ user ] } = await client.query(
+      `SELECT username
+      FROM users
+      WHERE id=${ id }`
+    ) ;
+
+    if (!user){ 
+      return null
+    } 
+    delete user.password
+    return user
+}catch(error){
+  throw error
+
+}}
     
 
 module.exports = {
-    createUser, getUsers, createInitialUsers, requireUser
+    createUser, getUsers, createInitialUsers, requireUser, getUserById
 }
