@@ -26,6 +26,13 @@ routine_activitiesRouter.patch('/:routineActivityId',requireUser, req,res=>{
 //NOT SETUP YET
 routine_activitiesRouter.delete('/:routineActivityId', requireUser, req,res =>{
     const { routineActivityId } = req.params
-    //hard delete an activity from a routine
-
+    const deleteact = await destroyRoutineActivity(routineActivityId)
+    delete deleteact;
+    const routine = getAllRoutines()
+  try {
+    if(res){
+    res.send(routine)
+    }
+     }catch (error) {
+  }
 });

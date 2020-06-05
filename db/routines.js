@@ -20,7 +20,7 @@ async function createRoutine({
    }
 };
 
-//we need to include the activities with the routines were returning.
+
 async function getAllRoutines() {
   try {
     const { rows:routines } = await client.query(`
@@ -37,7 +37,6 @@ async function getAllRoutines() {
 };
 
 
-//We need to include the activities that the routines contain here
 async function getPublicRoutines(){
   try {
     const { rows:routines } = await client.query(`
@@ -113,7 +112,7 @@ async function getAllRoutinesByUser({ username }) {
  };
  
  
- //Also returning an empty array.
+
 async function getPublicRoutinesByUser({creatorId}) {
      try {
        const { rows:routines } = await client.query(`
@@ -122,17 +121,16 @@ async function getPublicRoutinesByUser({creatorId}) {
        WHERE "creatorId"=${creatorId} 
        AND public=true
        `);
-      //  const publicUserRoutines = await Promise.all(routines.map(
-      // //   routine => getAllRoutinesByUser( {creatorId} )
-      // ));
-      return publicUserRoutines;
-   
+       for(let routine of routines){
+        routine.activities = await getActivitiesByRoutineId(routine.id);
+      };
+      return routines;
      } catch (error) {
        throw error;
      }
  };
    
- //Also returning an empty array.
+ 
 async function getPublicRoutinesByActivity({ activityId }){
      try {
        const { rows: publicRoutines } = await client.query(`
@@ -170,6 +168,11 @@ async function updateRoutine({ id, public, name, goal }) {
 };
 
 
+
+
+
+
+//HELPER TO ADD ACTIVITIES
 async function getActivitiesByRoutineId(id){
   const { rows:activities } = await client.query(`
         SELECT *

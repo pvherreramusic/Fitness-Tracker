@@ -8,7 +8,7 @@ routinesRouter.use((next)=>{
     next();
 });
 
-//still need to return the ACTIVITIES WITH the routines here
+
 routinesRouter.get('/',( res )=>{
    try{ 
     const pubRoutines =  getPublicRoutines();
@@ -47,6 +47,7 @@ routinesRouter.patch('/:routineId',requireUser,(req,res)=>{
     }catch(error){throw error}
 });
 
+
 routinesRouter.delete('/:routineId', requireUser,(req,res)=>{
     const routineId = req.params
     try{
@@ -55,6 +56,7 @@ routinesRouter.delete('/:routineId', requireUser,(req,res)=>{
         }
     }catch(error){throw error}
 });
+
 
 routinesRouter.post('/:routineId/actiivites',(req,res)=>{
     //Attach a single activity to a routine. Prevent duplicates on routineId and activityId
