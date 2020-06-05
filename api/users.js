@@ -18,7 +18,7 @@ usersRouter.post('/register', async (req, res, next) => {
   bcrypt.hash(password, SALT_COUNT, function(err, hashedPassword) {
     const newUser =  createUser({
       username,
-      password: hashedPassword // not the plaintext
+      password: hashedPassword 
     });
 
     const token = jwt.sign({ 

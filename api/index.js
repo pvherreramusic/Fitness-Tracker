@@ -30,12 +30,14 @@ apiRouter.use((req,res,next)=>{
   }
 });
 
+
 apiRouter.use((req, next) => {
   if (req.user) {
     console.log("User is set:", req.user);
   }
   next();
 });
+
 
 //Our routers for each file.
 const usersRouter = require('./users');
@@ -46,6 +48,9 @@ apiRouter.use('/routines', routinesRouter);
 
 const activitiesRouter = require('./activities');
 apiRouter.use('/activities', activitiesRouter);
+
+const routineActivitiesRouter = require('./routine_activities');
+apiRouter.use('./routine_activities',routineActivitiesRouter);
 
 
 apiRouter.use((error, res) => {
