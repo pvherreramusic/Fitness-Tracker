@@ -12,6 +12,7 @@ app.listen( PORT, () => {
 
 });
 
+//>>>>>>>>>>>>>>THIS IS CRASHING SERVER>>>>>>>>>await errors
 // const apiRouter = require('../api/index');
 // app.use('/api', apiRouter);
 

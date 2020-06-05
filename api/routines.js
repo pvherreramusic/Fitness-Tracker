@@ -53,13 +53,26 @@ routinesRouter.delete('/:routineId', requireUser,(req,res)=>{
     try{
         if (routineId){
             //HARD DELETE this routineId somehow
+           const activity = await getActivitiesByRoutineId(routineId)
+            await destroyRoutineActivities(activity.id)
+            await destroyRoutine(routineId)
+            res;
         }
     }catch(error){throw error}
 });
 
 
-routinesRouter.post('/:routineId/actiivites',(req,res)=>{
-    //Attach a single activity to a routine. Prevent duplicates on routineId and activityId
+routinesRouter.post('/:routineId/activities',(req,res)=>{
+  const routineId = req.params
+  try{
+      if(routineId){
+          const activity = await getActivitiesByRoutineId(routineId)
+         const updatedRoutine= await addActivityToRoutine(routineId, activity.id, activity.count, activity.duration)
+         res.send(updatedRoutine)
+      }
+  } catch(error){
+      throw error
+  }
 });
 
 
