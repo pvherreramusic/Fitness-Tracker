@@ -4,10 +4,10 @@ const jwt = require ('jsonwebtoken');
 const usersRouter = express.Router();
 const {  createUser } = require('../db/users');
 
-usersRouter.use((next)=>{
+usersRouter.use(('/', (req,res, next) => {
     console.log('A request is being made to the users router!');
     next();
-});
+}));
 
 
 usersRouter.post('/register', async (req, res, next) => {
@@ -47,7 +47,7 @@ usersRouter.post('/login', async (req, res, next) => {
     });
   }
   try{
-  const user = await getUser(username, password);
+  const user = await getUserByUsername(username);
   const hashedPassword = user.password;
 
   bcrypt.compare(password, hashedPassword, function(err, passwordsMatch) {
@@ -68,7 +68,7 @@ usersRouter.post('/login', async (req, res, next) => {
   }
 });
 
-usersRouter.get('/:username/routines', async ( res ) => {
+usersRouter.get('/:username/routines', async ( req, res ) => {
   const userRoutines = await getPublicRoutinesByUser();
   res.send({
     userRoutines

@@ -4,7 +4,7 @@ const { requireUser } = require('../db/users')
 
 
 
-routine_activitiesRouter.use(next=>{
+routine_activitiesRouter.use((req,res,next)=>{
     console.log('A request is being made to the routine_activities router!')
     next();
 });

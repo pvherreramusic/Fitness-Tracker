@@ -1,17 +1,18 @@
 const express = require('express');
 const activitiesRouter = express.Router();
 const { requireUser }  = require('../db/users')
-const { createActivity, updateActivity } = require('../db/activities')
+const { createActivity, updateActivity, getAllActivities } = require('../db/activities')
 const { getPublicRoutinesByActivity } = require('../db/routines')
 
-activitiesRouter.use((next)=>{
+activitiesRouter.use((req,res,next)=>{
     console.log('A request is being made to our activities router!');
     next();
 });
 
 
-activitiesRouter.get('/',async ( res )=>{
+activitiesRouter.get('/',async (req,res)=>{
     try{
+        console.log('Calling')
         const allActivites = await getAllActivities();
         res.send(allActivites);
     }catch(error){
@@ -19,7 +20,7 @@ activitiesRouter.get('/',async ( res )=>{
 });
 
 
-activitiesRouter.post('/', requireUser, async ( req,res )=>{
+activitiesRouter.post('/', requireUser, async (req,res)=>{
     const { name, description } = req.body;
     const activityData = {}
     try{

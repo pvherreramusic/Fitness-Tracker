@@ -33,7 +33,7 @@ apiRouter.use(async (req,res,next)=>{
 });
 
 
-apiRouter.use((req, next) => {
+apiRouter.use(async (req,res, next) => {
   if (req.user) {
     console.log("User is set:", req.user);
   }
@@ -55,7 +55,7 @@ const routineActivitiesRouter = require('./routine_activities');
 apiRouter.use('./routine_activities',routineActivitiesRouter);
 
 
-apiRouter.use((error, res) => {
+apiRouter.use((error, req, res, next ) => {
     res.send(error);
   });
 

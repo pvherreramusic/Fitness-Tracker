@@ -1,15 +1,15 @@
 const express = require('express');
 const routinesRouter = express.Router();
 const { requireUser } = require('../db/users')
-const { updateRoutine } = require('../db/routines')
+const { updateRoutine, getPublicRoutines } = require('../db/routines')
 
-routinesRouter.use((next)=>{
+routinesRouter.use((req, res, next)=>{
     console.log('A request is being made to the routines router!');
     next();
 });
 
 
-routinesRouter.get('/',( res )=>{
+routinesRouter.get('/',(req,res,next)=>{
    try{ 
     const pubRoutines =  getPublicRoutines();
     if(pubRoutines){
@@ -21,7 +21,7 @@ routinesRouter.get('/',( res )=>{
 });
 
 
-routinesRouter.post('/', requireUser, async( req,res, next )=>{
+routinesRouter.post('/', requireUser, async(req, res, next)=>{
     const { name, goal } = req.body
     const routineData = {}
     try{
