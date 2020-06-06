@@ -19,6 +19,16 @@ async function createRoutine({
      throw error;
    }
 };
+async function getActivitiesByRoutineId(id){
+  const { rows:[activities] } = await client.query(`
+        SELECT *
+        FROM activities
+        JOIN routine_activities ON routine_activities."activityId" = activities.id
+        WHERE routine_activities."routineId" = $1;
+       `,[id])
+        
+  return activities
+}
 
 
 async function getAllRoutines() {
@@ -104,7 +114,7 @@ async function getAllRoutinesByUser({ username }) {
 
 async function getPublicRoutinesByUser({creatorId}) {
      try {
-       const { rows:routines } = await client.query(`
+       const { rows: routines } = await client.query(`
        SELECT *
        FROM routines
        WHERE "creatorId"=${creatorId} 
@@ -158,17 +168,7 @@ async function updateRoutine({ id, public, name, goal}) {
 };
 
 
-async function getActivitiesByRoutineId(id){
-  const { rows:activities } = await client.query(`
-        SELECT *
-        FROM activities
-        JOIN routine_activities ON routine_activities."activityId" = activities.id
-        WHERE routine_activities."routineId" = $1;
-       `,[id])
-        
-  return activities
-  //this is being returned as just an object
-}
+
 
 
   async function destroyRoutine(id){

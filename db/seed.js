@@ -124,7 +124,7 @@ async function testDB(){
         console.log('Here is your updated routine!', updatedRoutine)
 
         console.log(chalk.yellow('Calling updateActivity'))
-        updatedActivity = await updateActivity({id:1, name: 'Skating', description:'Fine, we can just cruise.'})
+        updatedActivity = await updateActivity({id:2, name: 'Skating', description:'Fine, we can just cruise.'})
         console.log('Here is your updated activity!', updatedActivity)
 
         console.log(chalk.yellow('Calling updateRoutine'))

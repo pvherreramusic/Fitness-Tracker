@@ -5,7 +5,7 @@ const { JWT_SECRET } = process.env;
 const jwt = require('jsonwebtoken');
 
 
-apiRouter.use((req,res,next)=>{
+apiRouter.use(async (req,res,next)=>{
   const prefix = 'Bearer ';
   const auth = req.header('Authorization');
 

@@ -1,4 +1,4 @@
-// OUR MAIN SERVER
+
 const express = require('express'); 
 const PORT  = process.env.PORT || 3000;
 const app = express();
@@ -11,10 +11,6 @@ app.listen( PORT, () => {
     console.log(chalk.green(`Server is listening on PORT:${ PORT }`));
 
 });
-
-//>>>>>>>>>>>>>>THIS IS CRASHING SERVER>>>>>>>>>await errors
-// const apiRouter = require('../api/index');
-// app.use('/api', apiRouter);
 
 module.exports = {
     client

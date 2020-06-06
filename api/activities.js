@@ -1,7 +1,7 @@
 const express = require('express');
 const activitiesRouter = express.Router();
-const requireUser = require('../db/users')
-const { createActivity, updateActivity } = require('../activities')
+const { requireUser }  = require('../db/users')
+const { createActivity, updateActivity } = require('../db/activities')
 const { getPublicRoutinesByActivity } = require('../db/routines')
 
 activitiesRouter.use((next)=>{
@@ -10,7 +10,7 @@ activitiesRouter.use((next)=>{
 });
 
 
-activitiesRouter.get('/',( res )=>{
+activitiesRouter.get('/',async ( res )=>{
     try{
         const allActivites = await getAllActivities();
         res.send(allActivites);
@@ -35,7 +35,7 @@ activitiesRouter.post('/', requireUser, async ( req,res )=>{
 });
 
 
-activitiesRouter.patch('/:activityId', requireUser,(req,res)=>{
+activitiesRouter.patch('/:activityId', requireUser, async (req,res)=>{
     const { activityId } = req.params
     try{
         const updatedActivity = await updateActivity({ activityId})
@@ -47,7 +47,7 @@ activitiesRouter.patch('/:activityId', requireUser,(req,res)=>{
     }
 });
 
-activitiesRouter.get('/:activityId/routines', requireUser,(req, res)=>{
+activitiesRouter.get('/:activityId/routines', requireUser, async (req, res)=>{
     const { activityId } = req.params
     try{
         const routinesWithActivity = await getPublicRoutinesByActivity({activityId})

@@ -1,6 +1,6 @@
 const express = require('express');
 const routine_activitiesRouter = express.Router();
-const requireUser = require('../db/users')
+const { requireUser } = require('../db/users')
 
 
 
@@ -9,7 +9,7 @@ routine_activitiesRouter.use(next=>{
     next();
 });
 
-routine_activitiesRouter.patch('/:routineActivityId',requireUser, req,res=>{
+routine_activitiesRouter.patch('/:routineActivityId',requireUser, async(req,res)=>{
     const { routineActivityId } = req.params
     const { count, duration} = req.body
     
@@ -24,7 +24,7 @@ routine_activitiesRouter.patch('/:routineActivityId',requireUser, req,res=>{
 });
 
 
-routine_activitiesRouter.delete('/:routineActivityId', requireUser, req,res =>{
+routine_activitiesRouter.delete('/:routineActivityId', requireUser,async( req,res) =>{
     const { routineActivityId } = req.params
     const deleteact = await destroyRoutineActivity(routineActivityId)
     delete deleteact;

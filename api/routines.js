@@ -1,6 +1,6 @@
 const express = require('express');
 const routinesRouter = express.Router();
-const requireUser = require('../db/users')
+const { requireUser } = require('../db/users')
 const { updateRoutine } = require('../db/routines')
 
 routinesRouter.use((next)=>{
@@ -20,25 +20,30 @@ routinesRouter.get('/',( res )=>{
    }
 });
 
-
-routinesRouter.post('/', requireUser, async( req,res )=>{
+console.log('Heres require user' ,requireUser)
+routinesRouter.post('/', requireUser, async( req,res, next )=>{
     const { name, goal } = req.body
     const routineData = {}
     try{
         routineData.name = name
         routineData.goal = goal
-        const newRoutine = createRoutine( routineData )
+        const newRoutine = await createRoutine( routineData )
         if( newRoutine ){
-            res.send( newRoutine )
+            res.send ({ newRoutine })
         }
-    }catch(error){
-        throw error
+    }catch({name,message}){
+        next( {name,message})
     }
 });
 
 //need to be the OWNER of the routine, so CREATORID cant be null.
-routinesRouter.patch('/:routineId',requireUser,(req,res)=>{
+routinesRouter.patch('/:routineId',requireUser,async (req,res)=>{
     const routineId = req.params
+
+    const user = await getUserById()
+    //still need to get user
+    if (user.id === creatorId)
+
     try{
         const updatedRoutine =  updateRoutine(routineId)
         if (updatedRoutine){
@@ -48,7 +53,7 @@ routinesRouter.patch('/:routineId',requireUser,(req,res)=>{
 });
 
 
-routinesRouter.delete('/:routineId', requireUser,(req,res)=>{
+routinesRouter.delete('/:routineId', requireUser,async (req,res)=>{
     const routineId = req.params
     try{
         if (routineId){
@@ -62,7 +67,7 @@ routinesRouter.delete('/:routineId', requireUser,(req,res)=>{
 });
 
 
-routinesRouter.post('/:routineId/activities',(req,res)=>{
+routinesRouter.post('/:routineId/activities',async (req,res)=>{
   const routineId = req.params
   try{
       if(routineId){
