@@ -36,3 +36,5 @@ routine_activitiesRouter.delete('/:routineActivityId', requireUser, req,res =>{
      }catch (error) {
   }
 });
+
+module.exports = routine_activitiesRouter

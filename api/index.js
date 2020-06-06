@@ -1,6 +1,8 @@
 const express = require('express');
 const apiRouter = express.Router();
 const { getUserById } = require('../db/users.js')
+const { JWT_SECRET } = process.env;
+const jwt = require('jsonwebtoken');
 
 
 apiRouter.use((req,res,next)=>{
