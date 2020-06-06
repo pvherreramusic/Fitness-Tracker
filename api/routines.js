@@ -20,7 +20,7 @@ routinesRouter.get('/',( res )=>{
    }
 });
 
-console.log('Heres require user' ,requireUser)
+
 routinesRouter.post('/', requireUser, async( req,res, next )=>{
     const { name, goal } = req.body
     const routineData = {}
