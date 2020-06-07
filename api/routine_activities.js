@@ -37,4 +37,4 @@ routine_activitiesRouter.delete('/:routineActivityId', requireUser,async( req,re
   }
 });
 
-module.exports = routine_activitiesRouter
+module.exports = routine_activitiesRouter;

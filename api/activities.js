@@ -12,7 +12,6 @@ activitiesRouter.use((req,res,next)=>{
 
 activitiesRouter.get('/',async (req,res)=>{
     try{
-        console.log('Calling')
         const allActivites = await getAllActivities();
         res.send(allActivites);
     }catch(error){

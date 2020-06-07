@@ -69,7 +69,18 @@ async function createInitialActivities(){
   }
 }
 
+async function getActivitiesByRoutineId(id){
+  const { rows:[activities] } = await client.query(`
+        SELECT *
+        FROM activities
+        JOIN routine_activities ON routine_activities."activityId" = activities.id
+        WHERE routine_activities."routineId" = $1;
+       `,[id])
+        
+  return activities
+}
+
 module.exports = {
-    createActivity, getAllActivities, createInitialActivities, updateActivity
+    createActivity, getAllActivities, createInitialActivities, updateActivity, getActivitiesByRoutineId
 };
 

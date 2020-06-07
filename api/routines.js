@@ -1,7 +1,8 @@
 const express = require('express');
 const routinesRouter = express.Router();
-const { requireUser } = require('../db/users')
+const { requireUser, getUserByRoutineId } = require('../db/users')
 const { updateRoutine, getPublicRoutines } = require('../db/routines')
+const { getActivitiesByRoutineId } = require('../db/activities')
 
 routinesRouter.use((req, res, next)=>{
     console.log('A request is being made to the routines router!');
@@ -36,20 +37,19 @@ routinesRouter.post('/', requireUser, async(req, res, next)=>{
     }
 });
 
-//need to be the OWNER of the routine, so CREATORID cant be null.
 routinesRouter.patch('/:routineId',requireUser,async (req,res)=>{
     const routineId = req.params
-
-    const user = await getUserById()
-    //still need to get user
-    if (user.id === creatorId)
-
-    try{
-        const updatedRoutine =  updateRoutine(routineId)
-        if (updatedRoutine){
-            res.send(updatedRoutine)
-        }
-    }catch(error){throw error}
+    const {rows:routines}= await getAllRoutines()
+    const user = await getUserByRoutineId(routineId)
+    if (user.id === routines.creatorId){
+        try{
+            const updatedRoutine =  updateRoutine(routineId)
+            if (updatedRoutine){
+                res.send(updatedRoutine)
+            }
+        }catch(error){
+            throw error}
+    }
 });
 
 
@@ -57,9 +57,8 @@ routinesRouter.delete('/:routineId', requireUser,async (req,res)=>{
     const routineId = req.params
     try{
         if (routineId){
-            //HARD DELETE this routineId somehow
-           const activity = await getActivitiesByRoutineId(routineId)
-            await destroyRoutineActivities(activity.id)
+           const activities = await getActivitiesByRoutineId(routineId)
+            await destroyRoutineActivities(activities.id)
             await destroyRoutine(routineId)
             res;
         }
@@ -72,7 +71,9 @@ routinesRouter.post('/:routineId/activities',async (req,res)=>{
   try{
       if(routineId){
           const activity = await getActivitiesByRoutineId(routineId)
+          
          const updatedRoutine= await addActivityToRoutine(routineId, activity.id, activity.count, activity.duration)
+
          res.send(updatedRoutine)
       }
   } catch(error){

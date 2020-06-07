@@ -1,4 +1,5 @@
 const { client } = require('./client');
+const { getActivitiesByRoutineId } = require('./activities')
 
 
 async function createRoutine({
@@ -19,16 +20,7 @@ async function createRoutine({
      throw error;
    }
 };
-async function getActivitiesByRoutineId(id){
-  const { rows:[activities] } = await client.query(`
-        SELECT *
-        FROM activities
-        JOIN routine_activities ON routine_activities."activityId" = activities.id
-        WHERE routine_activities."routineId" = $1;
-       `,[id])
-        
-  return activities
-}
+
 
 
 async function getAllRoutines() {
@@ -167,11 +159,7 @@ async function updateRoutine({ id, public, name, goal}) {
   }   
 };
 
-
-
-
-
-  async function destroyRoutine(id){
+async function destroyRoutine(id){
     try{
       await client.query(`
       DELETE FROM routines

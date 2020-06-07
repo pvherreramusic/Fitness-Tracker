@@ -1,7 +1,7 @@
 const { client  } = require('./client')
-const { getUsers, createUser, createInitialUsers} = require('./users')
-const { createActivity, getAllActivities, createInitialActivities, updateActivity } = require('./activities')
-const { createRoutine, getAllRoutines, getAllRoutinesByUser, updateRoutine, createInitialRoutines, getPublicRoutines, getPublicRoutinesByUser, getPublicRoutinesByActivity, destroyRoutine} = require('./routines')
+const { getUsers, createInitialUsers} = require('./users')
+const {  getAllActivities, createInitialActivities, updateActivity } = require('./activities')
+const {  getAllRoutines, getAllRoutinesByUser, updateRoutine, createInitialRoutines, getPublicRoutines, getPublicRoutinesByUser, getPublicRoutinesByActivity, destroyRoutine} = require('./routines')
 const { addActivityToRoutine, updateRoutineActivity, destroyRoutineActivity } = require ('./routine_activities')
 
 const chalk = require('chalk')

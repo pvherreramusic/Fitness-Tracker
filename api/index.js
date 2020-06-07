@@ -41,7 +41,7 @@ apiRouter.use(async (req,res, next) => {
 });
 
 
-//Our routers for each file.
+
 const usersRouter = require('./users');
 apiRouter.use('/users', usersRouter);
 
@@ -52,7 +52,7 @@ const activitiesRouter = require('./activities');
 apiRouter.use('/activities', activitiesRouter);
 
 const routineActivitiesRouter = require('./routine_activities');
-apiRouter.use('./routine_activities',routineActivitiesRouter);
+apiRouter.use('/routine_activities',routineActivitiesRouter);
 
 
 apiRouter.use((error, req, res, next ) => {
